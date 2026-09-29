@@ -33,7 +33,17 @@ export const Route = createFileRoute("/dashboard")({
 
 const NAV_ITEMS = [
   { label: "Dashboard", icon: Gauge, active: true },
-  { label: "Client Management", icon: Users },
+  {
+    label: "Client Management",
+    icon: Users,
+    children: [
+      "View Active Clients",
+      "View Inactive Clients",
+      "Inventory Update",
+      "Inbound Inventories",
+      "View Future Shows",
+    ],
+  },
   { label: "Order Management", icon: FileText },
   { label: "Settings", icon: Settings },
   { label: "Reports", icon: ExternalLink },
