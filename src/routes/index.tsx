@@ -37,6 +37,12 @@ function Index() {
       <p className="mt-4 max-w-md text-center text-sm text-muted-foreground">
         A rental storefront is on its way. Details to follow.
       </p>
+      <Link
+        to="/login"
+        className="mt-8 inline-flex items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        Sign in
+      </Link>
     </div>
   );
 }
