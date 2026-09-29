@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, Pencil, X, Plus } from "lucide-react";
 
@@ -26,6 +26,7 @@ export const Route = createFileRoute("/dashboard/clients/active")({
 });
 
 type Client = {
+  id: string;
   contactName: string;
   companyName: string;
   email: string;
@@ -35,6 +36,7 @@ type Client = {
 
 const CLIENTS: Client[] = [
   {
+    id: "1",
     contactName: "Alison Clem",
     companyName: "The Event Lounge",
     email: "noreply@yopmail.com",
@@ -42,6 +44,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "2",
     contactName: "Alison Clem",
     companyName: "The Event Lounge",
     email: "noreply@yopmail.com",
@@ -49,6 +52,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "3",
     contactName: "Anee Parker",
     companyName: "Honeywell International Inc",
     email: "argos_anee@yopmail.com",
@@ -56,6 +60,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "4",
     contactName: "Brandon Duhon",
     companyName: "Beacon",
     email: "bduhon@yopmail.com",
@@ -63,6 +68,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "5",
     contactName: "Clean Alison",
     companyName: "The Longue Event",
     email: "wory@ytet.com",
@@ -70,6 +76,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "6",
     contactName: "Daniel Richard",
     companyName: "GuestXM (AKA: Black Box Intelligence)",
     email: "Riciild6666@gmail.com",
@@ -77,6 +84,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "7",
     contactName: "Dave Johnson",
     companyName: "Argos InfoTech",
     email: "moreinfo@argosinfotech.com",
@@ -84,6 +92,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "8",
     contactName: "David Jones",
     companyName: "USA Telecom",
     email: "david@yopmail.com",
@@ -91,6 +100,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "9",
     contactName: "David Jones",
     companyName: "Nienow and Sons",
     email: "nienow@yopmail.com",
@@ -98,6 +108,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "10",
     contactName: "Derrick Peter",
     companyName: "Blue Kite Web Solutions LLC",
     email: "derrick@yopmail.com",
@@ -105,6 +116,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "11",
     contactName: "Fill Allen",
     companyName: "Fill Allen & Co.",
     email: "fillAllentst.us@gmail.com",
@@ -112,6 +124,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "12",
     contactName: "Harry Mike",
     companyName: "Heyway",
     email: "heyway@gmail.com",
@@ -119,6 +132,7 @@ const CLIENTS: Client[] = [
     active: "Yes",
   },
   {
+    id: "13",
     contactName: "Jackson Loyer",
     companyName: "Jackson Constructions",
     email: "jackson@gtalk.us",
@@ -174,13 +188,14 @@ function ViewActiveClients() {
           <h1 className="text-lg font-semibold uppercase tracking-wide text-foreground">
             View Clients
           </h1>
-          <button
-            type="button"
+          <Link
+            to="/dashboard/clients/$clientId"
+            params={{ clientId: "new" }}
             className="inline-flex items-center gap-2 rounded-md bg-[#3b6fe0] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2f5cc4]"
           >
             <Plus className="h-4 w-4" />
             Add New Client
-          </button>
+          </Link>
         </div>
 
         {/* Controls */}
@@ -244,33 +259,42 @@ function ViewActiveClients() {
               </tr>
             </thead>
             <tbody>
-              {visible.map((client, idx) => (
+              {visible.map((client) => (
                 <tr
-                  key={`${client.contactName}-${idx}`}
+                  key={client.id}
                   className="border-t border-border hover:bg-muted/50"
                 >
                   <td className="px-6 py-3">
-                    <span className="cursor-pointer text-[#3b6fe0] hover:underline">
+                    <Link
+                      to="/dashboard/clients/$clientId"
+                      params={{ clientId: client.id }}
+                      className="text-[#3b6fe0] hover:underline"
+                    >
                       {client.contactName}
-                    </span>
+                    </Link>
                   </td>
                   <td className="px-6 py-3">
-                    <span className="cursor-pointer text-[#3b6fe0] hover:underline">
+                    <Link
+                      to="/dashboard/clients/$clientId"
+                      params={{ clientId: client.id }}
+                      className="text-[#3b6fe0] hover:underline"
+                    >
                       {client.companyName}
-                    </span>
+                    </Link>
                   </td>
                   <td className="px-6 py-3 text-foreground">{client.email}</td>
                   <td className="px-6 py-3 text-foreground">{client.phone}</td>
                   <td className="px-6 py-3 text-foreground">{client.active}</td>
                   <td className="px-6 py-3">
                     <div className="flex items-center gap-3">
-                      <button
-                        type="button"
+                      <Link
+                        to="/dashboard/clients/$clientId"
+                        params={{ clientId: client.id }}
                         aria-label={`Edit ${client.contactName}`}
                         className="text-green-600 hover:text-green-700"
                       >
                         <Pencil className="h-4 w-4" />
-                      </button>
+                      </Link>
                       <button
                         type="button"
                         aria-label={`Deactivate ${client.contactName}`}
