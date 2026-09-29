@@ -132,6 +132,23 @@ function LoginPage() {
             >
               Sign In
             </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setEmail(DUMMY_EMAIL);
+                setPassword(DUMMY_PASSWORD);
+                setError("");
+              }}
+              className="w-full rounded-md border border-dashed border-[#3b6fe0]/40 bg-[#3b6fe0]/5 px-3 py-2.5 text-center transition-colors hover:bg-[#3b6fe0]/10"
+            >
+              <span className="block text-xs font-medium text-[#3b6fe0]">
+                Demo login — click to autofill
+              </span>
+              <span className="mt-0.5 block text-xs text-muted-foreground">
+                {DUMMY_EMAIL} / {DUMMY_PASSWORD}
+              </span>
+            </button>
           </form>
         </div>
       </div>
