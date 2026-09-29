@@ -33,7 +33,17 @@ export const Route = createFileRoute("/dashboard")({
 
 const NAV_ITEMS = [
   { label: "Dashboard", icon: Gauge, active: true },
-  { label: "Client Management", icon: Users },
+  {
+    label: "Client Management",
+    icon: Users,
+    children: [
+      "View Active Clients",
+      "View Inactive Clients",
+      "Inventory Update",
+      "Inbound Inventories",
+      "View Future Shows",
+    ],
+  },
   { label: "Order Management", icon: FileText },
   { label: "Settings", icon: Settings },
   { label: "Reports", icon: ExternalLink },
@@ -46,6 +56,7 @@ const STATS = [
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [expanded, setExpanded] = useState<string | null>("Client Management");
 
   return (
     <div className="flex min-h-screen bg-[#f4f5fa]">
@@ -61,21 +72,46 @@ function Dashboard() {
           </span>
         </div>
         <nav className="mt-2 space-y-1 px-3">
-          {NAV_ITEMS.map(({ label, icon: Icon, active }) => (
-            <button
-              key={label}
-              type="button"
-              className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
-                active
-                  ? "bg-[#3b6fe0]/10 font-medium text-[#3b6fe0]"
-                  : "text-foreground hover:bg-muted"
-              }`}
-            >
-              <Icon className="h-4 w-4 shrink-0" />
-              <span className="flex-1">{label}</span>
-              <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-            </button>
-          ))}
+          {NAV_ITEMS.map(({ label, icon: Icon, active, children }) => {
+            const isOpen = expanded === label;
+            return (
+              <div key={label}>
+                <button
+                  type="button"
+                  onClick={() =>
+                    children &&
+                    setExpanded((prev) => (prev === label ? null : label))
+                  }
+                  className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
+                    active
+                      ? "bg-[#3b6fe0]/10 font-medium text-[#3b6fe0]"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span className="flex-1">{label}</span>
+                  <ChevronRight
+                    className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform ${
+                      isOpen ? "rotate-90" : ""
+                    }`}
+                  />
+                </button>
+                {children && isOpen && (
+                  <div className="mb-1 mt-1 space-y-0.5 pl-8">
+                    {children.map((child) => (
+                      <button
+                        key={child}
+                        type="button"
+                        className="block w-full rounded-md px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                      >
+                        {child}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
       </aside>
 
