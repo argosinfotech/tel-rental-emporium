@@ -56,6 +56,7 @@ const STATS = [
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [expanded, setExpanded] = useState<string | null>("Client Management");
 
   return (
     <div className="flex min-h-screen bg-[#f4f5fa]">
