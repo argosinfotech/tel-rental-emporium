@@ -36,7 +36,7 @@ function LoginPage() {
     e.preventDefault();
     if (email.trim().toLowerCase() === DUMMY_EMAIL && password === DUMMY_PASSWORD) {
       setError("");
-      navigate({ to: "/" });
+      navigate({ to: "/dashboard" });
     } else {
       setError("Invalid email or password. Try support@tel.com / admin@123");
     }
