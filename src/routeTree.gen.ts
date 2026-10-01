@@ -27,8 +27,11 @@ import { Route as DashboardClientsActiveRouteImport } from './routes/dashboard.c
 import { Route as DashboardEventsIndexRouteImport } from './routes/dashboard.events.index'
 import { Route as DashboardEventsEventIdRouteImport } from './routes/dashboard.events.$eventId'
 import { Route as DashboardEventsNewRouteImport } from './routes/dashboard.events.new'
+import { Route as DashboardEventsOrdersRouteImport } from './routes/dashboard.events.orders'
 import { Route as StoreShopIndexRouteImport } from './routes/store.shop.index'
 import { Route as StoreShopProductIdRouteImport } from './routes/store.shop.$productId'
+import { Route as DashboardEventsOrdersIndexRouteImport } from './routes/dashboard.events.orders.index'
+import { Route as DashboardEventsOrdersOrderIdRouteImport } from './routes/dashboard.events.orders.$orderId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -121,6 +124,11 @@ const DashboardEventsNewRoute = DashboardEventsNewRouteImport.update({
   path: '/new',
   getParentRoute: () => DashboardEventsRoute,
 } as any)
+const DashboardEventsOrdersRoute = DashboardEventsOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => DashboardEventsRoute,
+} as any)
 const StoreShopIndexRoute = StoreShopIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -131,6 +139,18 @@ const StoreShopProductIdRoute = StoreShopProductIdRouteImport.update({
   path: '/$productId',
   getParentRoute: () => StoreShopRoute,
 } as any)
+const DashboardEventsOrdersIndexRoute =
+  DashboardEventsOrdersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardEventsOrdersRoute,
+  } as any)
+const DashboardEventsOrdersOrderIdRoute =
+  DashboardEventsOrdersOrderIdRouteImport.update({
+    id: '/$orderId',
+    path: '/$orderId',
+    getParentRoute: () => DashboardEventsOrdersRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -150,9 +170,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/clients/active': typeof DashboardClientsActiveRoute
   '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
   '/dashboard/events/new': typeof DashboardEventsNewRoute
+  '/dashboard/events/orders': typeof DashboardEventsOrdersRouteWithChildren
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
   '/store/shop/': typeof StoreShopIndexRoute
+  '/dashboard/events/orders/$orderId': typeof DashboardEventsOrdersOrderIdRoute
+  '/dashboard/events/orders/': typeof DashboardEventsOrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -171,6 +194,8 @@ export interface FileRoutesByTo {
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events': typeof DashboardEventsIndexRoute
   '/store/shop': typeof StoreShopIndexRoute
+  '/dashboard/events/orders/$orderId': typeof DashboardEventsOrdersOrderIdRoute
+  '/dashboard/events/orders': typeof DashboardEventsOrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -191,9 +216,12 @@ export interface FileRoutesById {
   '/dashboard/clients/active': typeof DashboardClientsActiveRoute
   '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
   '/dashboard/events/new': typeof DashboardEventsNewRoute
+  '/dashboard/events/orders': typeof DashboardEventsOrdersRouteWithChildren
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
   '/store/shop/': typeof StoreShopIndexRoute
+  '/dashboard/events/orders/$orderId': typeof DashboardEventsOrdersOrderIdRoute
+  '/dashboard/events/orders/': typeof DashboardEventsOrdersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -215,9 +243,12 @@ export interface FileRouteTypes {
     | '/dashboard/clients/active'
     | '/dashboard/events/$eventId'
     | '/dashboard/events/new'
+    | '/dashboard/events/orders'
     | '/store/shop/$productId'
     | '/dashboard/events/'
     | '/store/shop/'
+    | '/dashboard/events/orders/$orderId'
+    | '/dashboard/events/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -236,6 +267,8 @@ export interface FileRouteTypes {
     | '/store/shop/$productId'
     | '/dashboard/events'
     | '/store/shop'
+    | '/dashboard/events/orders/$orderId'
+    | '/dashboard/events/orders'
   id:
     | '__root__'
     | '/'
@@ -255,9 +288,12 @@ export interface FileRouteTypes {
     | '/dashboard/clients/active'
     | '/dashboard/events/$eventId'
     | '/dashboard/events/new'
+    | '/dashboard/events/orders'
     | '/store/shop/$productId'
     | '/dashboard/events/'
     | '/store/shop/'
+    | '/dashboard/events/orders/$orderId'
+    | '/dashboard/events/orders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -395,6 +431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEventsNewRouteImport
       parentRoute: typeof DashboardEventsRoute
     }
+    '/dashboard/events/orders': {
+      id: '/dashboard/events/orders'
+      path: '/orders'
+      fullPath: '/dashboard/events/orders'
+      preLoaderRoute: typeof DashboardEventsOrdersRouteImport
+      parentRoute: typeof DashboardEventsRoute
+    }
     '/store/shop/': {
       id: '/store/shop/'
       path: '/'
@@ -409,18 +452,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreShopProductIdRouteImport
       parentRoute: typeof StoreShopRoute
     }
+    '/dashboard/events/orders/': {
+      id: '/dashboard/events/orders/'
+      path: '/'
+      fullPath: '/dashboard/events/orders/'
+      preLoaderRoute: typeof DashboardEventsOrdersIndexRouteImport
+      parentRoute: typeof DashboardEventsOrdersRoute
+    }
+    '/dashboard/events/orders/$orderId': {
+      id: '/dashboard/events/orders/$orderId'
+      path: '/$orderId'
+      fullPath: '/dashboard/events/orders/$orderId'
+      preLoaderRoute: typeof DashboardEventsOrdersOrderIdRouteImport
+      parentRoute: typeof DashboardEventsOrdersRoute
+    }
   }
 }
+
+interface DashboardEventsOrdersRouteChildren {
+  DashboardEventsOrdersOrderIdRoute: typeof DashboardEventsOrdersOrderIdRoute
+  DashboardEventsOrdersIndexRoute: typeof DashboardEventsOrdersIndexRoute
+}
+
+const DashboardEventsOrdersRouteChildren: DashboardEventsOrdersRouteChildren = {
+  DashboardEventsOrdersOrderIdRoute: DashboardEventsOrdersOrderIdRoute,
+  DashboardEventsOrdersIndexRoute: DashboardEventsOrdersIndexRoute,
+}
+
+const DashboardEventsOrdersRouteWithChildren =
+  DashboardEventsOrdersRoute._addFileChildren(
+    DashboardEventsOrdersRouteChildren,
+  )
 
 interface DashboardEventsRouteChildren {
   DashboardEventsEventIdRoute: typeof DashboardEventsEventIdRoute
   DashboardEventsNewRoute: typeof DashboardEventsNewRoute
+  DashboardEventsOrdersRoute: typeof DashboardEventsOrdersRouteWithChildren
   DashboardEventsIndexRoute: typeof DashboardEventsIndexRoute
 }
 
 const DashboardEventsRouteChildren: DashboardEventsRouteChildren = {
   DashboardEventsEventIdRoute: DashboardEventsEventIdRoute,
   DashboardEventsNewRoute: DashboardEventsNewRoute,
+  DashboardEventsOrdersRoute: DashboardEventsOrdersRouteWithChildren,
   DashboardEventsIndexRoute: DashboardEventsIndexRoute,
 }
 

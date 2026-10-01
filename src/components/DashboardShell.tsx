@@ -35,7 +35,10 @@ const NAV_ITEMS: {
   {
     label: "Event Management",
     icon: CalendarDays,
-    children: [{ label: "View Events", to: "/dashboard/events" }],
+    children: [
+      { label: "View Events", to: "/dashboard/events" },
+      { label: "View New Orders", to: "/dashboard/events/orders" },
+    ],
   },
   { label: "Order Management", icon: FileText },
   { label: "Settings", icon: Settings },
@@ -127,9 +130,12 @@ export function DashboardShell() {
                     {children.map((child) => {
                       const childActive =
                         child.to !== undefined &&
-                        (pathname === child.to ||
-                          (child.to === "/dashboard/events" &&
-                            pathname.startsWith("/dashboard/events")));
+                        (child.to === "/dashboard/events/orders"
+                          ? pathname.startsWith("/dashboard/events/orders")
+                          : child.to === "/dashboard/events"
+                            ? pathname.startsWith("/dashboard/events") &&
+                              !pathname.startsWith("/dashboard/events/orders")
+                            : pathname === child.to);
                       const className = `block w-full rounded-md px-3 py-2 text-left text-sm transition-colors ${
                         childActive
                           ? "font-medium"
