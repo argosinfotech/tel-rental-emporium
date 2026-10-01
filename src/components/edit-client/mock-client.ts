@@ -1,6 +1,5 @@
 export type EditClientTab =
   | "client-info"
-  | "contract"
   | "projects"
   | "shipping"
   | "brands"
@@ -8,12 +7,10 @@ export type EditClientTab =
   | "products"
   | "kits"
   | "client-logins"
-  | "payment"
   | "inventory";
 
 export const EDIT_CLIENT_TABS: { id: EditClientTab; label: string }[] = [
   { id: "client-info", label: "Client Info" },
-  { id: "contract", label: "Contract" },
   { id: "projects", label: "Projects" },
   { id: "shipping", label: "Shipping Addresses" },
   { id: "brands", label: "Brands" },
@@ -21,7 +18,6 @@ export const EDIT_CLIENT_TABS: { id: EditClientTab; label: string }[] = [
   { id: "products", label: "Products" },
   { id: "kits", label: "Kits" },
   { id: "client-logins", label: "Client Logins" },
-  { id: "payment", label: "Payment Setting" },
   { id: "inventory", label: "Inventory Update" },
 ];
 
@@ -81,7 +77,6 @@ export const US_STATES = [
 export type ClientInfo = {
   id: string;
   companyName: string;
-  onboardingFee: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -93,30 +88,6 @@ export type ClientInfo = {
   zip: string;
   paymentRequired: boolean;
   approvalRequired: boolean;
-  rewardPortal: string;
-  active: string;
-  notes: string;
-  companyLogo: string;
-};
-
-export type JobType = {
-  id: string;
-  jobType: string;
-  freePulls: string;
-  additionalPrice: string;
-  usedPull: string;
-  freePullsUsed: string;
-  pullsRemaining: string;
-  returnShipping: boolean;
-  sendToShipStation: boolean;
-  notes: string;
-};
-
-export type ContractFee = {
-  monthlyFee: string;
-  duration: string;
-  startDate: string;
-  endDate: string;
   notes: string;
 };
 
@@ -158,8 +129,10 @@ export type Product = {
   vendorName: string;
   categoryName: string;
   retailPrice: string;
-  rewardPoint: string;
+  costPrice: string;
   openingStock: string;
+  availableForRent: boolean;
+  rentalPrice: string;
 };
 
 export type Kit = {
@@ -178,18 +151,10 @@ export type ClientLogin = {
   email: string;
   userRole: string;
   brand: string;
-  approver: string;
-};
-
-export type PaymentSetting = {
-  publishableKey: string;
-  secretKey: string;
 };
 
 export type ClientBundle = {
   info: ClientInfo;
-  contract: ContractFee;
-  jobTypes: JobType[];
   projects: Project[];
   shippingAddresses: ShippingAddress[];
   brands: Brand[];
@@ -197,14 +162,12 @@ export type ClientBundle = {
   products: Product[];
   kits: Kit[];
   logins: ClientLogin[];
-  payment: PaymentSetting;
 };
 
 const EVENT_LOUNGE: ClientBundle = {
   info: {
     id: "1",
     companyName: "The Event Lounge",
-    onboardingFee: "250",
     firstName: "Alison",
     lastName: "Clem",
     email: "noreply@yopmail.com",
@@ -216,78 +179,21 @@ const EVENT_LOUNGE: ClientBundle = {
     zip: "75010",
     paymentRequired: true,
     approvalRequired: true,
-    rewardPortal: "Yes",
-    active: "Yes",
     notes: "",
-    companyLogo: "logo.png",
   },
-  contract: {
-    monthlyFee: "1900",
-    duration: "1 Year",
-    startDate: "2026-07-11",
-    endDate: "07/10/2027",
-    notes: "Test 2",
-  },
-  jobTypes: [
-    {
-      id: "jt1",
-      jobType: "Pallet",
-      freePulls: "100",
-      additionalPrice: "90.00",
-      usedPull: "5",
-      freePullsUsed: "5",
-      pullsRemaining: "95",
-      returnShipping: true,
-      sendToShipStation: true,
-      notes: "",
-    },
-    {
-      id: "jt2",
-      jobType: "Flat Boxes",
-      freePulls: "20",
-      additionalPrice: "100.00",
-      usedPull: "7",
-      freePullsUsed: "7",
-      pullsRemaining: "13",
-      returnShipping: false,
-      sendToShipStation: true,
-      notes: "",
-    },
-    {
-      id: "jt3",
-      jobType: "Customize",
-      freePulls: "10",
-      additionalPrice: "200.00",
-      usedPull: "0",
-      freePullsUsed: "0",
-      pullsRemaining: "10",
-      returnShipping: false,
-      sendToShipStation: false,
-      notes: "",
-    },
-    {
-      id: "jt4",
-      jobType: "Pallet 2",
-      freePulls: "100",
-      additionalPrice: "90.00",
-      usedPull: "0",
-      freePullsUsed: "0",
-      pullsRemaining: "100",
-      returnShipping: true,
-      sendToShipStation: true,
-      notes: "Test",
-    },
+  projects: [
+    { id: "p1", name: "AWS", notes: "" },
+    { id: "p2", name: "Cloud Integration", notes: "" },
   ],
-  projects: [{ id: "p1", name: "Window Type", notes: "" }],
   shippingAddresses: [
     {
       id: "s1",
-      firstName: "James",
-      lastName: "Parker",
-      companyName: "",
-      phone: "(214) 258-7896",
-      address1: "4425 Plano Parkway Suite 904",
-      address2: "",
+      firstName: "Alison",
+      lastName: "Clem",
+      companyName: "The Event Lounge",
+      phone: "(435) 678-8787",
+      address1: "4425 Plano Parkway",
+      address2: "Suite 100",
       city: "Carrollton",
       stateCode: "TX",
       zip: "75010",
@@ -295,55 +201,62 @@ const EVENT_LOUNGE: ClientBundle = {
     },
   ],
   brands: [
-    { id: "b1", name: "Promo 1" },
-    { id: "b2", name: "Promo 2" },
-    { id: "b3", name: "Promo 3" },
+    { id: "b1", name: "Apple" },
+    { id: "b2", name: "MartrixCare" },
+    { id: "b3", name: "Samsung" },
   ],
-  categories: [{ id: "c1", name: "Promotional Items" }],
+  categories: [
+    { id: "c1", name: "Event Promotion" },
+    { id: "c2", name: "Office Supplies" },
+  ],
   products: [
     {
       id: "pr1",
-      itemNumber: "EL01",
-      itemName: "Metal Straw 2.5",
-      brand: "Promo 1",
-      category: "Promotional Items",
-      description1: "Metal straw with lid",
+      itemNumber: "0021",
+      itemName: "iPhoneX",
+      brand: "Apple",
+      category: "Event Promotion",
+      description1: "Fountain Pen",
       description2: "",
-      weight: "0.00",
-      availableStock: "981",
+      weight: "0.50",
+      availableStock: "5000",
       thresholdQty: "0",
       imageUrl: "",
       vendorName: "",
       categoryName: "",
       retailPrice: "0",
-      rewardPoint: "0",
-      openingStock: "0",
+      costPrice: "0",
+      openingStock: "5000",
+      availableForRent: false,
+      rentalPrice: "",
     },
     {
       id: "pr2",
-      itemNumber: "EL02",
-      itemName: "Metal Shaker",
-      brand: "Promo 2",
-      category: "Promotional Items",
-      description1: "Metal shaker bottle",
+      itemNumber: "0203",
+      itemName: "Apple Laptops",
+      brand: "Apple",
+      category: "Office Supplies",
+      description1: "iphone 14",
       description2: "",
-      weight: "30.00",
-      availableStock: "995",
+      weight: "3.00",
+      availableStock: "5200",
       thresholdQty: "1",
       imageUrl: "",
       vendorName: "",
       categoryName: "",
       retailPrice: "0",
-      rewardPoint: "0",
-      openingStock: "0",
+      costPrice: "0",
+      openingStock: "5200",
+      availableForRent: false,
+      rentalPrice: "",
     },
   ],
   kits: [
     {
       id: "k1",
-      name: "sample kit",
-      width: "10",
-      height: "12",
+      name: "Event - Company",
+      width: "50",
+      height: "70",
       imageUrl: "",
       productCount: 2,
     },
@@ -351,43 +264,19 @@ const EVENT_LOUNGE: ClientBundle = {
   logins: [
     {
       id: "l1",
-      firstName: "Jason",
-      lastName: "Black",
-      email: "jasonblackus@gmail.com",
+      firstName: "Alison",
+      lastName: "Clem",
+      email: "alison@yopmail.com",
       userRole: "Full Access",
       brand: "",
-      approver: "",
-    },
-    {
-      id: "l2",
-      firstName: "Eden",
-      lastName: "Parker",
-      email: "eden@yopmail.com",
-      userRole: "Single Brand Only",
-      brand: "Promo 1",
-      approver: "No",
-    },
-    {
-      id: "l3",
-      firstName: "Kelvin",
-      lastName: "Parker",
-      email: "kelvin@yopmail.com",
-      userRole: "Single Brand - selected item only",
-      brand: "Promo 1",
-      approver: "No",
     },
   ],
-  payment: {
-    publishableKey: "",
-    secretKey: "",
-  },
 };
 
 const EMPTY_CLIENT: ClientBundle = {
   info: {
     id: "new",
     companyName: "",
-    onboardingFee: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -399,19 +288,8 @@ const EMPTY_CLIENT: ClientBundle = {
     zip: "",
     paymentRequired: true,
     approvalRequired: true,
-    rewardPortal: "Yes",
-    active: "Yes",
-    notes: "",
-    companyLogo: "",
-  },
-  contract: {
-    monthlyFee: "",
-    duration: "1 Year",
-    startDate: "",
-    endDate: "",
     notes: "",
   },
-  jobTypes: [],
   projects: [],
   shippingAddresses: [],
   brands: [],
@@ -419,25 +297,7 @@ const EMPTY_CLIENT: ClientBundle = {
   products: [],
   kits: [],
   logins: [],
-  payment: { publishableKey: "", secretKey: "" },
 };
-
-/** Stable ids used by Active Clients list rows */
-export const ACTIVE_CLIENT_IDS = [
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-  "13",
-] as const;
 
 export function getClientBundle(clientId: string): ClientBundle {
   if (clientId === "new") {
@@ -446,7 +306,6 @@ export function getClientBundle(clientId: string): ClientBundle {
   if (clientId === "1") {
     return structuredClone(EVENT_LOUNGE);
   }
-  // Other list rows: clone Event Lounge template with id overridden
   const clone = structuredClone(EVENT_LOUNGE);
   clone.info.id = clientId;
   return clone;

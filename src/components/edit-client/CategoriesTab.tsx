@@ -11,6 +11,7 @@ import {
   PrimaryButton,
   SearchToolbar,
   TableHeaderCell,
+  TealTableHead,
 } from "@/components/edit-client/SearchToolbar";
 import {
   Dialog,
@@ -71,12 +72,10 @@ export function CategoriesTab({ categories, onChange }: CategoriesTabProps) {
       />
       <div className="overflow-x-auto px-6 pb-6">
         <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="bg-[#eef2fb] text-left">
-              <TableHeaderCell>Category Name</TableHeaderCell>
-              <TableHeaderCell className="text-right">Action</TableHeaderCell>
-            </tr>
-          </thead>
+          <TealTableHead>
+            <TableHeaderCell>Category Name</TableHeaderCell>
+            <TableHeaderCell className="text-right">Action</TableHeaderCell>
+          </TealTableHead>
           <tbody>
             {filtered.map((c) => (
               <tr key={c.id} className="border-t border-border">

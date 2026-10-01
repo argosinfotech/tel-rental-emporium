@@ -39,7 +39,7 @@ export function ViewIconButton({ label, onClick }: IconBtnProps) {
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="text-[#3b6fe0] hover:text-[#2f5cc4]"
+      className="text-[#0b8a7a] hover:text-[#09786b]"
     >
       <Eye className="h-4 w-4" />
     </button>
@@ -52,7 +52,7 @@ export function PlusIconButton({ label, onClick }: IconBtnProps) {
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="text-[#3b6fe0] hover:text-[#2f5cc4]"
+      className="text-[#0b8a7a] hover:text-[#09786b]"
     >
       <Plus className="h-4 w-4" />
     </button>
@@ -65,7 +65,7 @@ export function DocIconButton({ label, onClick }: IconBtnProps) {
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="text-[#3b6fe0] hover:text-[#2f5cc4]"
+      className="text-[#0b8a7a] hover:text-[#09786b]"
     >
       <FileText className="h-4 w-4" />
     </button>

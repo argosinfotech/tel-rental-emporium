@@ -12,9 +12,23 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as StoreRouteImport } from './routes/store'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardEventsRouteImport } from './routes/dashboard.events'
+import { Route as StoreIndexRouteImport } from './routes/store.index'
+import { Route as StoreCartRouteImport } from './routes/store.cart'
+import { Route as StoreCheckoutRouteImport } from './routes/store.checkout'
+import { Route as StoreEventRouteImport } from './routes/store.event'
+import { Route as StoreHomeRouteImport } from './routes/store.home'
+import { Route as StoreOrderCompleteRouteImport } from './routes/store.order-complete'
+import { Route as StoreShopRouteImport } from './routes/store.shop'
 import { Route as DashboardClientsClientIdRouteImport } from './routes/dashboard.clients.$clientId'
 import { Route as DashboardClientsActiveRouteImport } from './routes/dashboard.clients.active'
+import { Route as DashboardEventsIndexRouteImport } from './routes/dashboard.events.index'
+import { Route as DashboardEventsEventIdRouteImport } from './routes/dashboard.events.$eventId'
+import { Route as DashboardEventsNewRouteImport } from './routes/dashboard.events.new'
+import { Route as StoreShopIndexRouteImport } from './routes/store.shop.index'
+import { Route as StoreShopProductIdRouteImport } from './routes/store.shop.$productId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -31,10 +45,55 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoreRoute = StoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEventsRoute = DashboardEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const StoreIndexRoute = StoreIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreCartRoute = StoreCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreCheckoutRoute = StoreCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreEventRoute = StoreEventRouteImport.update({
+  id: '/event',
+  path: '/event',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreHomeRoute = StoreHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreOrderCompleteRoute = StoreOrderCompleteRouteImport.update({
+  id: '/order-complete',
+  path: '/order-complete',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreShopRoute = StoreShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => StoreRoute,
 } as any)
 const DashboardClientsClientIdRoute =
   DashboardClientsClientIdRouteImport.update({
@@ -47,30 +106,94 @@ const DashboardClientsActiveRoute = DashboardClientsActiveRouteImport.update({
   path: '/clients/active',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardEventsIndexRoute = DashboardEventsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardEventsRoute,
+} as any)
+const DashboardEventsEventIdRoute = DashboardEventsEventIdRouteImport.update({
+  id: '/$eventId',
+  path: '/$eventId',
+  getParentRoute: () => DashboardEventsRoute,
+} as any)
+const DashboardEventsNewRoute = DashboardEventsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => DashboardEventsRoute,
+} as any)
+const StoreShopIndexRoute = StoreShopIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StoreShopRoute,
+} as any)
+const StoreShopProductIdRoute = StoreShopProductIdRouteImport.update({
+  id: '/$productId',
+  path: '/$productId',
+  getParentRoute: () => StoreShopRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
+  '/store': typeof StoreRouteWithChildren
+  '/dashboard/events': typeof DashboardEventsRouteWithChildren
+  '/store/cart': typeof StoreCartRoute
+  '/store/checkout': typeof StoreCheckoutRoute
+  '/store/event': typeof StoreEventRoute
+  '/store/home': typeof StoreHomeRoute
+  '/store/order-complete': typeof StoreOrderCompleteRoute
+  '/store/shop': typeof StoreShopRouteWithChildren
   '/dashboard/': typeof DashboardIndexRoute
+  '/store/': typeof StoreIndexRoute
   '/dashboard/clients/$clientId': typeof DashboardClientsClientIdRoute
   '/dashboard/clients/active': typeof DashboardClientsActiveRoute
+  '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
+  '/dashboard/events/new': typeof DashboardEventsNewRoute
+  '/store/shop/$productId': typeof StoreShopProductIdRoute
+  '/dashboard/events/': typeof DashboardEventsIndexRoute
+  '/store/shop/': typeof StoreShopIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/store/cart': typeof StoreCartRoute
+  '/store/checkout': typeof StoreCheckoutRoute
+  '/store/event': typeof StoreEventRoute
+  '/store/home': typeof StoreHomeRoute
+  '/store/order-complete': typeof StoreOrderCompleteRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/store': typeof StoreIndexRoute
   '/dashboard/clients/$clientId': typeof DashboardClientsClientIdRoute
   '/dashboard/clients/active': typeof DashboardClientsActiveRoute
+  '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
+  '/dashboard/events/new': typeof DashboardEventsNewRoute
+  '/store/shop/$productId': typeof StoreShopProductIdRoute
+  '/dashboard/events': typeof DashboardEventsIndexRoute
+  '/store/shop': typeof StoreShopIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
+  '/store': typeof StoreRouteWithChildren
+  '/dashboard/events': typeof DashboardEventsRouteWithChildren
+  '/store/cart': typeof StoreCartRoute
+  '/store/checkout': typeof StoreCheckoutRoute
+  '/store/event': typeof StoreEventRoute
+  '/store/home': typeof StoreHomeRoute
+  '/store/order-complete': typeof StoreOrderCompleteRoute
+  '/store/shop': typeof StoreShopRouteWithChildren
   '/dashboard/': typeof DashboardIndexRoute
+  '/store/': typeof StoreIndexRoute
   '/dashboard/clients/$clientId': typeof DashboardClientsClientIdRoute
   '/dashboard/clients/active': typeof DashboardClientsActiveRoute
+  '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
+  '/dashboard/events/new': typeof DashboardEventsNewRoute
+  '/store/shop/$productId': typeof StoreShopProductIdRoute
+  '/dashboard/events/': typeof DashboardEventsIndexRoute
+  '/store/shop/': typeof StoreShopIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -78,30 +201,70 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/store'
+    | '/dashboard/events'
+    | '/store/cart'
+    | '/store/checkout'
+    | '/store/event'
+    | '/store/home'
+    | '/store/order-complete'
+    | '/store/shop'
     | '/dashboard/'
+    | '/store/'
     | '/dashboard/clients/$clientId'
     | '/dashboard/clients/active'
+    | '/dashboard/events/$eventId'
+    | '/dashboard/events/new'
+    | '/store/shop/$productId'
+    | '/dashboard/events/'
+    | '/store/shop/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
+    | '/store/cart'
+    | '/store/checkout'
+    | '/store/event'
+    | '/store/home'
+    | '/store/order-complete'
     | '/dashboard'
+    | '/store'
     | '/dashboard/clients/$clientId'
     | '/dashboard/clients/active'
+    | '/dashboard/events/$eventId'
+    | '/dashboard/events/new'
+    | '/store/shop/$productId'
+    | '/dashboard/events'
+    | '/store/shop'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/login'
+    | '/store'
+    | '/dashboard/events'
+    | '/store/cart'
+    | '/store/checkout'
+    | '/store/event'
+    | '/store/home'
+    | '/store/order-complete'
+    | '/store/shop'
     | '/dashboard/'
+    | '/store/'
     | '/dashboard/clients/$clientId'
     | '/dashboard/clients/active'
+    | '/dashboard/events/$eventId'
+    | '/dashboard/events/new'
+    | '/store/shop/$productId'
+    | '/dashboard/events/'
+    | '/store/shop/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
+  StoreRoute: typeof StoreRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -127,12 +290,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/store': {
+      id: '/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof StoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/events': {
+      id: '/dashboard/events'
+      path: '/events'
+      fullPath: '/dashboard/events'
+      preLoaderRoute: typeof DashboardEventsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/store/': {
+      id: '/store/'
+      path: '/'
+      fullPath: '/store/'
+      preLoaderRoute: typeof StoreIndexRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/cart': {
+      id: '/store/cart'
+      path: '/cart'
+      fullPath: '/store/cart'
+      preLoaderRoute: typeof StoreCartRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/checkout': {
+      id: '/store/checkout'
+      path: '/checkout'
+      fullPath: '/store/checkout'
+      preLoaderRoute: typeof StoreCheckoutRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/event': {
+      id: '/store/event'
+      path: '/event'
+      fullPath: '/store/event'
+      preLoaderRoute: typeof StoreEventRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/home': {
+      id: '/store/home'
+      path: '/home'
+      fullPath: '/store/home'
+      preLoaderRoute: typeof StoreHomeRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/order-complete': {
+      id: '/store/order-complete'
+      path: '/order-complete'
+      fullPath: '/store/order-complete'
+      preLoaderRoute: typeof StoreOrderCompleteRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/shop': {
+      id: '/store/shop'
+      path: '/shop'
+      fullPath: '/store/shop'
+      preLoaderRoute: typeof StoreShopRouteImport
+      parentRoute: typeof StoreRoute
     }
     '/dashboard/clients/$clientId': {
       id: '/dashboard/clients/$clientId'
@@ -148,16 +374,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardClientsActiveRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/events/': {
+      id: '/dashboard/events/'
+      path: '/'
+      fullPath: '/dashboard/events/'
+      preLoaderRoute: typeof DashboardEventsIndexRouteImport
+      parentRoute: typeof DashboardEventsRoute
+    }
+    '/dashboard/events/$eventId': {
+      id: '/dashboard/events/$eventId'
+      path: '/$eventId'
+      fullPath: '/dashboard/events/$eventId'
+      preLoaderRoute: typeof DashboardEventsEventIdRouteImport
+      parentRoute: typeof DashboardEventsRoute
+    }
+    '/dashboard/events/new': {
+      id: '/dashboard/events/new'
+      path: '/new'
+      fullPath: '/dashboard/events/new'
+      preLoaderRoute: typeof DashboardEventsNewRouteImport
+      parentRoute: typeof DashboardEventsRoute
+    }
+    '/store/shop/': {
+      id: '/store/shop/'
+      path: '/'
+      fullPath: '/store/shop/'
+      preLoaderRoute: typeof StoreShopIndexRouteImport
+      parentRoute: typeof StoreShopRoute
+    }
+    '/store/shop/$productId': {
+      id: '/store/shop/$productId'
+      path: '/$productId'
+      fullPath: '/store/shop/$productId'
+      preLoaderRoute: typeof StoreShopProductIdRouteImport
+      parentRoute: typeof StoreShopRoute
+    }
   }
 }
 
+interface DashboardEventsRouteChildren {
+  DashboardEventsEventIdRoute: typeof DashboardEventsEventIdRoute
+  DashboardEventsNewRoute: typeof DashboardEventsNewRoute
+  DashboardEventsIndexRoute: typeof DashboardEventsIndexRoute
+}
+
+const DashboardEventsRouteChildren: DashboardEventsRouteChildren = {
+  DashboardEventsEventIdRoute: DashboardEventsEventIdRoute,
+  DashboardEventsNewRoute: DashboardEventsNewRoute,
+  DashboardEventsIndexRoute: DashboardEventsIndexRoute,
+}
+
+const DashboardEventsRouteWithChildren = DashboardEventsRoute._addFileChildren(
+  DashboardEventsRouteChildren,
+)
+
 interface DashboardRouteChildren {
+  DashboardEventsRoute: typeof DashboardEventsRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardClientsClientIdRoute: typeof DashboardClientsClientIdRoute
   DashboardClientsActiveRoute: typeof DashboardClientsActiveRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardEventsRoute: DashboardEventsRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardClientsClientIdRoute: DashboardClientsClientIdRoute,
   DashboardClientsActiveRoute: DashboardClientsActiveRoute,
@@ -167,10 +446,47 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
+interface StoreShopRouteChildren {
+  StoreShopProductIdRoute: typeof StoreShopProductIdRoute
+  StoreShopIndexRoute: typeof StoreShopIndexRoute
+}
+
+const StoreShopRouteChildren: StoreShopRouteChildren = {
+  StoreShopProductIdRoute: StoreShopProductIdRoute,
+  StoreShopIndexRoute: StoreShopIndexRoute,
+}
+
+const StoreShopRouteWithChildren = StoreShopRoute._addFileChildren(
+  StoreShopRouteChildren,
+)
+
+interface StoreRouteChildren {
+  StoreCartRoute: typeof StoreCartRoute
+  StoreCheckoutRoute: typeof StoreCheckoutRoute
+  StoreEventRoute: typeof StoreEventRoute
+  StoreHomeRoute: typeof StoreHomeRoute
+  StoreOrderCompleteRoute: typeof StoreOrderCompleteRoute
+  StoreShopRoute: typeof StoreShopRouteWithChildren
+  StoreIndexRoute: typeof StoreIndexRoute
+}
+
+const StoreRouteChildren: StoreRouteChildren = {
+  StoreCartRoute: StoreCartRoute,
+  StoreCheckoutRoute: StoreCheckoutRoute,
+  StoreEventRoute: StoreEventRoute,
+  StoreHomeRoute: StoreHomeRoute,
+  StoreOrderCompleteRoute: StoreOrderCompleteRoute,
+  StoreShopRoute: StoreShopRouteWithChildren,
+  StoreIndexRoute: StoreIndexRoute,
+}
+
+const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
+  StoreRoute: StoreRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

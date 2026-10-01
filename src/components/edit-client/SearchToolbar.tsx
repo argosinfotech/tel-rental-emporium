@@ -5,6 +5,7 @@ import type {
   SelectHTMLAttributes,
   TextareaHTMLAttributes,
 } from "react";
+import { BRAND } from "@/lib/brand";
 
 type SearchToolbarProps = {
   search: string;
@@ -28,7 +29,7 @@ export function SearchToolbar({
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full rounded-md border border-border bg-white py-2 pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:border-[#3b6fe0] focus:ring-2 focus:ring-[#3b6fe0]/20"
+          className="w-full rounded-md border border-border bg-white py-2 pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:border-[#0b8a7a] focus:ring-2 focus:ring-[#0b8a7a]/20"
         />
       </div>
       {actions && (
@@ -53,7 +54,7 @@ export function PrimaryButton({
     <button
       type={type}
       onClick={onClick}
-      className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#3b6fe0] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2f5cc4] ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#0b8a7a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#09786b] ${className}`}
     >
       {children}
     </button>
@@ -82,7 +83,7 @@ export function FormInput({
   return (
     <input
       {...props}
-      className={`w-full rounded-md border border-input bg-white px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-[#3b6fe0] focus:ring-2 focus:ring-[#3b6fe0]/20 disabled:bg-muted ${className}`}
+      className={`w-full rounded-md border border-input bg-white px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-[#0b8a7a] focus:ring-2 focus:ring-[#0b8a7a]/20 disabled:bg-muted ${className}`}
     />
   );
 }
@@ -95,7 +96,7 @@ export function FormSelect({
   return (
     <select
       {...props}
-      className={`w-full rounded-md border border-input bg-white px-3 py-2 text-sm outline-none focus:border-[#3b6fe0] focus:ring-2 focus:ring-[#3b6fe0]/20 ${className}`}
+      className={`w-full rounded-md border border-input bg-white px-3 py-2 text-sm outline-none focus:border-[#0b8a7a] focus:ring-2 focus:ring-[#0b8a7a]/20 ${className}`}
     >
       {children}
     </select>
@@ -109,7 +110,7 @@ export function FormTextarea({
   return (
     <textarea
       {...props}
-      className={`w-full rounded-md border border-input bg-white px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-[#3b6fe0] focus:ring-2 focus:ring-[#3b6fe0]/20 ${className}`}
+      className={`w-full rounded-md border border-input bg-white px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-[#0b8a7a] focus:ring-2 focus:ring-[#0b8a7a]/20 ${className}`}
     />
   );
 }
@@ -122,6 +123,16 @@ export function TableHeaderCell({
   className?: string;
 }) {
   return (
-    <th className={`px-4 py-3 font-semibold ${className}`}>{children}</th>
+    <th className={`px-4 py-3 font-semibold text-white ${className}`}>
+      {children}
+    </th>
+  );
+}
+
+export function TealTableHead({ children }: { children: ReactNode }) {
+  return (
+    <thead>
+      <tr style={{ backgroundColor: BRAND.primary }}>{children}</tr>
+    </thead>
   );
 }

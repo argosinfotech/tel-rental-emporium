@@ -77,15 +77,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TEL Rental Store" },
+      { title: "TEL Inventory Portal" },
       {
         name: "description",
-        content: "TEL Rental Store — rent equipment and gear online.",
+        content: "TEL Inventory Portal — manage inventory and fulfillment.",
       },
-      { property: "og:title", content: "TEL Rental Store" },
+      { property: "og:title", content: "TEL Inventory Portal" },
       {
         property: "og:description",
-        content: "TEL Rental Store — rent equipment and gear online.",
+        content: "TEL Inventory Portal — manage inventory and fulfillment.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -35,7 +35,7 @@ export function InventoryUpdateTab() {
           <input
             type="file"
             accept=".xlsx,.xls,.csv"
-            className="block w-full max-w-md text-sm file:mr-3 file:rounded-md file:border-0 file:bg-[#3b6fe0] file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
+            className="block w-full max-w-md text-sm file:mr-3 file:rounded-md file:border-0 file:bg-[#0b8a7a] file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
           />
         </div>
         <PrimaryButton onClick={() => undefined}>Update Inventory</PrimaryButton>

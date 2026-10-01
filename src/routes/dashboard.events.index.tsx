@@ -2,80 +2,90 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, Pencil, X, Plus } from "lucide-react";
 import { BRAND } from "@/lib/brand";
+import {
+  contactPersonName,
+  deleteEvent,
+  listEvents,
+  type InventoryEvent,
+} from "@/lib/mock-events";
 
-export const Route = createFileRoute("/dashboard/clients/active")({
+export const Route = createFileRoute("/dashboard/events/")({
   head: () => ({
     meta: [
-      { title: `View Clients — ${BRAND.name}` },
+      { title: `View Events — ${BRAND.name}` },
       {
         name: "description",
-        content: `List of clients in the ${BRAND.name}.`,
+        content: `List of events in the ${BRAND.name}.`,
       },
-      { property: "og:title", content: `View Clients — ${BRAND.name}` },
+      { property: "og:title", content: `View Events — ${BRAND.name}` },
       {
         property: "og:description",
-        content: `List of clients in the ${BRAND.name}.`,
+        content: `List of events in the ${BRAND.name}.`,
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: ViewActiveClients,
+  component: ViewEvents,
 });
 
-type Client = {
-  id: string;
-  contactName: string;
-  companyName: string;
-  email: string;
-  phone: string;
-  active: string;
-};
-
-const CLIENTS: Client[] = [
-  {
-    id: "1",
-    contactName: "Alison Clem",
-    companyName: "The Event Lounge",
-    email: "noreply@yopmail.com",
-    phone: "(435) 678-8787",
-    active: "Yes",
-  },
-];
-
-type SortKey = "contactName" | "companyName" | "email" | "phone" | "active";
+type SortKey =
+  | "eventName"
+  | "eventCode"
+  | "contactPerson"
+  | "fromDate"
+  | "toDate"
+  | "status";
 type SortDir = "asc" | "desc";
 
 const COLUMNS: { key: SortKey; label: string }[] = [
-  { key: "contactName", label: "Contact Name" },
-  { key: "companyName", label: "Company Name" },
-  { key: "email", label: "Email" },
-  { key: "phone", label: "Phone" },
-  { key: "active", label: "Active" },
+  { key: "eventName", label: "Event Name" },
+  { key: "eventCode", label: "Event Code" },
+  { key: "contactPerson", label: "Contact Person" },
+  { key: "fromDate", label: "From Date" },
+  { key: "toDate", label: "To Date" },
+  { key: "status", label: "Status" },
 ];
 
-function ViewActiveClients() {
+function formatDisplayDate(iso: string): string {
+  if (!iso) return "";
+  const [y, m, d] = iso.split("-");
+  if (!y || !m || !d) return iso;
+  return `${m}/${d}/${y}`;
+}
+
+function sortValue(event: InventoryEvent, key: SortKey): string {
+  if (key === "contactPerson") return contactPersonName(event);
+  return event[key];
+}
+
+function ViewEvents() {
+  const [version, setVersion] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("contactName");
+  const [sortKey, setSortKey] = useState<SortKey>("eventName");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+
+  const events = useMemo(() => listEvents(), [version]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     const rows = q
-      ? CLIENTS.filter(
-          (c) =>
-            c.contactName.toLowerCase().includes(q) ||
-            c.companyName.toLowerCase().includes(q) ||
-            c.email.toLowerCase().includes(q),
-        )
-      : CLIENTS;
+      ? events.filter((e) => {
+          const person = contactPersonName(e).toLowerCase();
+          return (
+            e.eventName.toLowerCase().includes(q) ||
+            e.eventCode.toLowerCase().includes(q) ||
+            person.includes(q)
+          );
+        })
+      : events;
     const sorted = [...rows].sort((a, b) =>
-      a[sortKey].localeCompare(b[sortKey]),
+      sortValue(a, sortKey).localeCompare(sortValue(b, sortKey)),
     );
     return sortDir === "asc" ? sorted : sorted.reverse();
-  }, [search, sortKey, sortDir]);
+  }, [events, search, sortKey, sortDir]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);
@@ -93,20 +103,31 @@ function ViewActiveClients() {
     }
   };
 
+  const onDelete = (event: InventoryEvent) => {
+    if (
+      !window.confirm(
+        `Delete event "${event.eventName}"? This cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+    deleteEvent(event.id);
+    setVersion((v) => v + 1);
+  };
+
   return (
     <div className="p-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-lg font-semibold uppercase tracking-wide text-[#495057]">
-          View Clients
+          View Events
         </h1>
         <Link
-          to="/dashboard/clients/$clientId"
-          params={{ clientId: "new" }}
+          to="/dashboard/events/new"
           className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90"
           style={{ backgroundColor: BRAND.primary }}
         >
           <Plus className="h-4 w-4" />
-          Add New Client
+          Add New Event
         </Link>
       </div>
 
@@ -139,14 +160,14 @@ function ViewActiveClients() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search by Contact Name, Company Name & Email..."
+              placeholder="Search by Event Name, Event Code & Contact Person..."
               className="w-full rounded-md border border-border bg-white px-3 py-1.5 text-sm placeholder:text-muted-foreground focus:border-[#0b8a7a] focus:outline-none focus:ring-2 focus:ring-[#0b8a7a]/20"
             />
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px] border-collapse text-sm">
+          <table className="w-full min-w-[1000px] border-collapse text-sm">
             <thead>
               <tr
                 className="text-left text-white"
@@ -183,47 +204,46 @@ function ViewActiveClients() {
               </tr>
             </thead>
             <tbody>
-              {visible.map((client) => (
+              {visible.map((event) => (
                 <tr
-                  key={client.id}
+                  key={event.id}
                   className="border-t border-border hover:bg-muted/40"
                 >
                   <td className="px-6 py-3">
                     <Link
-                      to="/dashboard/clients/$clientId"
-                      params={{ clientId: client.id }}
+                      to="/dashboard/events/$eventId"
+                      params={{ eventId: event.id }}
                       className="hover:underline"
                       style={{ color: BRAND.primary }}
                     >
-                      {client.contactName}
+                      {event.eventName}
                     </Link>
                   </td>
-                  <td className="px-6 py-3">
-                    <Link
-                      to="/dashboard/clients/$clientId"
-                      params={{ clientId: client.id }}
-                      className="hover:underline"
-                      style={{ color: BRAND.primary }}
-                    >
-                      {client.companyName}
-                    </Link>
+                  <td className="px-6 py-3 text-[#495057]">{event.eventCode}</td>
+                  <td className="px-6 py-3 text-[#495057]">
+                    {contactPersonName(event)}
                   </td>
-                  <td className="px-6 py-3 text-[#495057]">{client.email}</td>
-                  <td className="px-6 py-3 text-[#495057]">{client.phone}</td>
-                  <td className="px-6 py-3 text-[#495057]">{client.active}</td>
+                  <td className="px-6 py-3 text-[#495057]">
+                    {formatDisplayDate(event.fromDate)}
+                  </td>
+                  <td className="px-6 py-3 text-[#495057]">
+                    {formatDisplayDate(event.toDate)}
+                  </td>
+                  <td className="px-6 py-3 text-[#495057]">{event.status}</td>
                   <td className="px-6 py-3">
                     <div className="flex items-center gap-3">
                       <Link
-                        to="/dashboard/clients/$clientId"
-                        params={{ clientId: client.id }}
-                        aria-label={`Edit ${client.contactName}`}
+                        to="/dashboard/events/$eventId"
+                        params={{ eventId: event.id }}
+                        aria-label={`Edit ${event.eventName}`}
                         className="text-green-600 hover:text-green-700"
                       >
                         <Pencil className="h-4 w-4" />
                       </Link>
                       <button
                         type="button"
-                        aria-label={`Deactivate ${client.contactName}`}
+                        aria-label={`Delete ${event.eventName}`}
+                        onClick={() => onDelete(event)}
                         className="text-red-500 hover:text-red-600"
                       >
                         <X className="h-4 w-4" />
@@ -238,7 +258,7 @@ function ViewActiveClients() {
                     colSpan={COLUMNS.length + 1}
                     className="px-6 py-8 text-center text-muted-foreground"
                   >
-                    No clients found.
+                    No events found.
                   </td>
                 </tr>
               )}
@@ -270,9 +290,7 @@ function ViewActiveClients() {
                   type="button"
                   onClick={() => setPage(n)}
                   className={`min-w-8 rounded-md px-2.5 py-1.5 text-center ${
-                    n === currentPage
-                      ? "text-white"
-                      : "hover:bg-muted"
+                    n === currentPage ? "text-white" : "hover:bg-muted"
                   }`}
                   style={
                     n === currentPage

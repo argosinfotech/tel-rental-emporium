@@ -8,7 +8,6 @@ import type {
 import {
   ActionIconGroup,
   DeleteIconButton,
-  DocIconButton,
   EditIconButton,
 } from "@/components/edit-client/ActionIcons";
 import {
@@ -18,7 +17,9 @@ import {
   PrimaryButton,
   SearchToolbar,
   TableHeaderCell,
+  TealTableHead,
 } from "@/components/edit-client/SearchToolbar";
+import { BRAND } from "@/lib/brand";
 
 type ProductsTabProps = {
   products: Product[];
@@ -41,9 +42,18 @@ const emptyProduct = (): Omit<Product, "id"> => ({
   vendorName: "",
   categoryName: "",
   retailPrice: "",
-  rewardPoint: "0",
-  openingStock: "0",
+  costPrice: "0",
+  openingStock: "",
+  availableForRent: false,
+  rentalPrice: "",
 });
+
+function sanitizeDecimal(value: string): string {
+  const cleaned = value.replace(/[^\d.]/g, "");
+  const parts = cleaned.split(".");
+  if (parts.length <= 1) return cleaned;
+  return `${parts[0]}.${parts.slice(1).join("").slice(0, 2)}`;
+}
 
 function toForm(product: Product): Omit<Product, "id"> {
   const { id: _id, ...rest } = product;
@@ -97,6 +107,7 @@ export function ProductsTab({
 
   const save = () => {
     if (!form.itemNumber.trim() || !form.itemName.trim()) return;
+    if (form.availableForRent && !form.rentalPrice.trim()) return;
     if (editingId) {
       onChange(
         products.map((p) =>
@@ -125,7 +136,10 @@ export function ProductsTab({
   if (mode === "form") {
     return (
       <div className="p-6">
-        <h2 className="mb-4 text-base font-semibold text-[#3b6fe0]">
+        <h2
+          className="mb-4 text-base font-semibold"
+          style={{ color: BRAND.primary }}
+        >
           {editingId ? "Edit Product" : "Add New Product"}
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
@@ -199,25 +213,32 @@ export function ProductsTab({
               onChange={(e) => set("description2", e.target.value)}
             />
           </div>
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             <FieldLabel required>Weight (LBS)</FieldLabel>
             <FormInput
               value={form.weight}
               onChange={(e) => set("weight", e.target.value)}
             />
           </div>
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             <FieldLabel required>Retail Price</FieldLabel>
             <FormInput
               value={form.retailPrice}
               onChange={(e) => set("retailPrice", e.target.value)}
             />
           </div>
-          <div className="md:col-span-4">
-            <FieldLabel required>Reward Point</FieldLabel>
+          <div className="md:col-span-3">
+            <FieldLabel required>Cost Price</FieldLabel>
             <FormInput
-              value={form.rewardPoint}
-              onChange={(e) => set("rewardPoint", e.target.value)}
+              value={form.costPrice}
+              onChange={(e) => set("costPrice", e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-3">
+            <FieldLabel required>Threshold Quantity</FieldLabel>
+            <FormInput
+              value={form.thresholdQty}
+              onChange={(e) => set("thresholdQty", e.target.value)}
             />
           </div>
           <div className="md:col-span-4">
@@ -232,16 +253,41 @@ export function ProductsTab({
             <FormInput value={form.availableStock} disabled />
           </div>
           <div className="md:col-span-4">
-            <FieldLabel required>Threshold Quantity</FieldLabel>
-            <FormInput
-              value={form.thresholdQty}
-              onChange={(e) => set("thresholdQty", e.target.value)}
-            />
-          </div>
-          <div className="md:col-span-12">
             <FieldLabel>Item Image</FieldLabel>
             <FormInput type="file" accept="image/*" />
           </div>
+          <div className="md:col-span-4 flex items-end pb-2">
+            <label className="inline-flex items-center gap-2 text-sm font-medium text-foreground">
+              <input
+                type="checkbox"
+                checked={form.availableForRent}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setForm((f) => ({
+                    ...f,
+                    availableForRent: checked,
+                    rentalPrice: checked ? f.rentalPrice : "",
+                  }));
+                }}
+                className="h-4 w-4 rounded border-input"
+                style={{ accentColor: BRAND.primary }}
+              />
+              Is Available for Rent?
+            </label>
+          </div>
+          {form.availableForRent && (
+            <div className="md:col-span-4">
+              <FieldLabel required>Rental Price</FieldLabel>
+              <FormInput
+                inputMode="decimal"
+                value={form.rentalPrice}
+                placeholder="0.00"
+                onChange={(e) =>
+                  set("rentalPrice", sanitizeDecimal(e.target.value))
+                }
+              />
+            </div>
+          )}
         </div>
         <div className="mt-6 flex gap-2">
           <PrimaryButton onClick={save}>Save</PrimaryButton>
@@ -262,9 +308,6 @@ export function ProductsTab({
               Export Products
             </PrimaryButton>
             <PrimaryButton onClick={() => undefined}>
-              Export Products with Pictures
-            </PrimaryButton>
-            <PrimaryButton onClick={() => undefined}>
               Import Products
             </PrimaryButton>
             <PrimaryButton onClick={openAdd}>Add New Products</PrimaryButton>
@@ -272,30 +315,30 @@ export function ProductsTab({
         }
       />
       <div className="overflow-x-auto px-6 pb-6">
-        <table className="w-full min-w-[1100px] border-collapse text-sm">
-          <thead>
-            <tr className="bg-[#eef2fb] text-left">
-              <TableHeaderCell>Item Number</TableHeaderCell>
-              <TableHeaderCell>Item Name</TableHeaderCell>
-              <TableHeaderCell>Brand</TableHeaderCell>
-              <TableHeaderCell>Category</TableHeaderCell>
-              <TableHeaderCell>Description 1</TableHeaderCell>
-              <TableHeaderCell>Description 2</TableHeaderCell>
-              <TableHeaderCell>Weight (LBS)</TableHeaderCell>
-              <TableHeaderCell>Available Stock</TableHeaderCell>
-              <TableHeaderCell>Threshold Qty</TableHeaderCell>
-              <TableHeaderCell>Item Image</TableHeaderCell>
-              <TableHeaderCell>Action</TableHeaderCell>
-            </tr>
-          </thead>
+        <table className="w-full min-w-[900px] border-collapse text-sm">
+          <TealTableHead>
+            <TableHeaderCell>Item Number</TableHeaderCell>
+            <TableHeaderCell>Item Name</TableHeaderCell>
+            <TableHeaderCell>Description</TableHeaderCell>
+            <TableHeaderCell>Available Stock</TableHeaderCell>
+            <TableHeaderCell>Threshold Qty</TableHeaderCell>
+            <TableHeaderCell>Item Image</TableHeaderCell>
+            <TableHeaderCell>Action</TableHeaderCell>
+          </TealTableHead>
           <tbody>
-            {filtered.map((p) => (
-              <tr key={p.id} className="border-t border-border">
+            {filtered.map((p, idx) => (
+              <tr
+                key={p.id}
+                className={`border-t border-border ${
+                  idx % 2 === 1 ? "bg-muted/30" : ""
+                }`}
+              >
                 <td className="px-4 py-3">
                   <button
                     type="button"
                     onClick={() => openEdit(p)}
-                    className="text-[#3b6fe0] hover:underline"
+                    className="hover:underline"
+                    style={{ color: BRAND.primary }}
                   >
                     {p.itemNumber}
                   </button>
@@ -304,18 +347,15 @@ export function ProductsTab({
                   <button
                     type="button"
                     onClick={() => openEdit(p)}
-                    className="text-[#3b6fe0] hover:underline"
+                    className="hover:underline"
+                    style={{ color: BRAND.primary }}
                   >
                     {p.itemName}
                   </button>
                 </td>
-                <td className="px-4 py-3">{p.brand}</td>
-                <td className="px-4 py-3">{p.category}</td>
-                <td className="px-4 py-3">{p.description1}</td>
-                <td className="px-4 py-3">{p.description2}</td>
-                <td className="px-4 py-3">{p.weight}</td>
-                <td className="px-4 py-3">{p.availableStock}</td>
-                <td className="px-4 py-3">{p.thresholdQty}</td>
+                <td className="px-4 py-3 text-[#495057]">{p.description1}</td>
+                <td className="px-4 py-3 text-[#495057]">{p.availableStock}</td>
+                <td className="px-4 py-3 text-[#495057]">{p.thresholdQty}</td>
                 <td className="px-4 py-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded border border-border bg-muted">
                     <ImageIcon className="h-4 w-4 text-muted-foreground" />
@@ -323,7 +363,6 @@ export function ProductsTab({
                 </td>
                 <td className="px-4 py-3">
                   <ActionIconGroup>
-                    <DocIconButton label={`Details ${p.itemName}`} />
                     <EditIconButton
                       label={`Edit ${p.itemName}`}
                       onClick={() => openEdit(p)}

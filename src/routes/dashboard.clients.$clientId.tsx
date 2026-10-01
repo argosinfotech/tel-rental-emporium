@@ -4,7 +4,6 @@ import { BrandsTab } from "@/components/edit-client/BrandsTab";
 import { CategoriesTab } from "@/components/edit-client/CategoriesTab";
 import { ClientInfoTab } from "@/components/edit-client/ClientInfoTab";
 import { ClientLoginsTab } from "@/components/edit-client/ClientLoginsTab";
-import { ContractTab } from "@/components/edit-client/ContractTab";
 import { EditClientShell } from "@/components/edit-client/EditClientShell";
 import { InventoryUpdateTab } from "@/components/edit-client/InventoryUpdateTab";
 import { KitsTab } from "@/components/edit-client/KitsTab";
@@ -14,10 +13,10 @@ import {
   type ClientBundle,
   type EditClientTab,
 } from "@/components/edit-client/mock-client";
-import { PaymentSettingTab } from "@/components/edit-client/PaymentSettingTab";
 import { ProductsTab } from "@/components/edit-client/ProductsTab";
 import { ProjectsTab } from "@/components/edit-client/ProjectsTab";
 import { ShippingTab } from "@/components/edit-client/ShippingTab";
+import { BRAND } from "@/lib/brand";
 
 type EditClientSearch = {
   tab?: EditClientTab;
@@ -25,27 +24,28 @@ type EditClientSearch = {
 
 export const Route = createFileRoute("/dashboard/clients/$clientId")({
   validateSearch: (search: Record<string, unknown>): EditClientSearch => {
-    const tab = typeof search.tab === "string" ? search.tab : undefined;
-    return {
-      tab: isValidTab(tab) ? tab : undefined,
-    };
+    const tab = typeof search["tab"] === "string" ? search["tab"] : undefined;
+    if (isValidTab(tab)) {
+      return { tab };
+    }
+    return {};
   },
   head: ({ params }) => {
     const isNew = params.clientId === "new";
     const title = isNew
-      ? "Add New Client — TEL Rental Store"
-      : "Edit Client — TEL Rental Store";
+      ? `Add New Client — ${BRAND.name}`
+      : `Edit Client — ${BRAND.name}`;
     return {
       meta: [
         { title },
         {
           name: "description",
-          content: "Edit client details in the TEL Fulfillment Portal.",
+          content: `Edit client details in the ${BRAND.name}.`,
         },
         { property: "og:title", content: title },
         {
           property: "og:description",
-          content: "Edit client details in the TEL Fulfillment Portal.",
+          content: `Edit client details in the ${BRAND.name}.`,
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary" },
@@ -97,19 +97,7 @@ function EditClientPage() {
         <ClientInfoTab
           value={bundle.info}
           onChange={(info) => setBundle((b) => ({ ...b, info }))}
-          onSaveAndNext={() => handleTabChange("contract")}
-        />
-      )}
-      {activeTab === "contract" && (
-        <ContractTab
-          contract={bundle.contract}
-          onContractChange={(contract) =>
-            setBundle((b) => ({ ...b, contract }))
-          }
-          jobTypes={bundle.jobTypes}
-          onJobTypesChange={(jobTypes) =>
-            setBundle((b) => ({ ...b, jobTypes }))
-          }
+          onSaveAndNext={() => handleTabChange("projects")}
         />
       )}
       {activeTab === "projects" && (
@@ -157,12 +145,6 @@ function EditClientPage() {
           logins={bundle.logins}
           brands={bundle.brands}
           onChange={(logins) => setBundle((b) => ({ ...b, logins }))}
-        />
-      )}
-      {activeTab === "payment" && (
-        <PaymentSettingTab
-          value={bundle.payment}
-          onChange={(payment) => setBundle((b) => ({ ...b, payment }))}
         />
       )}
       {activeTab === "inventory" && <InventoryUpdateTab />}

@@ -12,6 +12,7 @@ import {
   PrimaryButton,
   SearchToolbar,
   TableHeaderCell,
+  TealTableHead,
 } from "@/components/edit-client/SearchToolbar";
 import {
   Dialog,
@@ -80,13 +81,11 @@ export function ProjectsTab({ projects, onChange }: ProjectsTabProps) {
       />
       <div className="overflow-x-auto px-6 pb-6">
         <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="bg-[#eef2fb] text-left">
-              <TableHeaderCell>Project Name</TableHeaderCell>
-              <TableHeaderCell>Project Notes</TableHeaderCell>
-              <TableHeaderCell className="text-right">Action</TableHeaderCell>
-            </tr>
-          </thead>
+          <TealTableHead>
+            <TableHeaderCell>Project Name</TableHeaderCell>
+            <TableHeaderCell>Project Notes</TableHeaderCell>
+            <TableHeaderCell className="text-right">Action</TableHeaderCell>
+          </TealTableHead>
           <tbody>
             {filtered.map((p) => (
               <tr key={p.id} className="border-t border-border">

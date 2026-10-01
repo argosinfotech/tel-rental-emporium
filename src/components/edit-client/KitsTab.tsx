@@ -14,6 +14,7 @@ import {
   PrimaryButton,
   SearchToolbar,
   TableHeaderCell,
+  TealTableHead,
 } from "@/components/edit-client/SearchToolbar";
 import {
   Dialog,
@@ -90,16 +91,14 @@ export function KitsTab({ kits, onChange }: KitsTabProps) {
       />
       <div className="overflow-x-auto px-6 pb-6">
         <table className="w-full min-w-[800px] border-collapse text-sm">
-          <thead>
-            <tr className="bg-[#eef2fb] text-left">
-              <TableHeaderCell>Kit Name</TableHeaderCell>
-              <TableHeaderCell>Dimension (W X H)</TableHeaderCell>
-              <TableHeaderCell>Image</TableHeaderCell>
-              <TableHeaderCell>Number of Products</TableHeaderCell>
-              <TableHeaderCell>View Products</TableHeaderCell>
-              <TableHeaderCell>Action</TableHeaderCell>
-            </tr>
-          </thead>
+          <TealTableHead>
+            <TableHeaderCell>Kit Name</TableHeaderCell>
+            <TableHeaderCell>Dimension (W X H)</TableHeaderCell>
+            <TableHeaderCell>Image</TableHeaderCell>
+            <TableHeaderCell>Number of Products</TableHeaderCell>
+            <TableHeaderCell>View Products</TableHeaderCell>
+            <TableHeaderCell>Action</TableHeaderCell>
+          </TealTableHead>
           <tbody>
             {filtered.map((k) => (
               <tr key={k.id} className="border-t border-border">

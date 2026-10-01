@@ -13,6 +13,7 @@ import {
   PrimaryButton,
   SearchToolbar,
   TableHeaderCell,
+  TealTableHead,
 } from "@/components/edit-client/SearchToolbar";
 import {
   Dialog,
@@ -105,21 +106,20 @@ export function ShippingTab({ addresses, onChange }: ShippingTabProps) {
         }
       />
       <div className="overflow-x-auto px-6 pb-6">
-        <table className="w-full min-w-[1000px] border-collapse text-sm">
-          <thead>
-            <tr className="bg-[#eef2fb] text-left">
-              <TableHeaderCell>First Name</TableHeaderCell>
-              <TableHeaderCell>Last Name</TableHeaderCell>
-              <TableHeaderCell>Company Name</TableHeaderCell>
-              <TableHeaderCell>Phone Number</TableHeaderCell>
-              <TableHeaderCell>Address</TableHeaderCell>
-              <TableHeaderCell>City</TableHeaderCell>
-              <TableHeaderCell>State</TableHeaderCell>
-              <TableHeaderCell>Zip</TableHeaderCell>
-              <TableHeaderCell>Group Name</TableHeaderCell>
-              <TableHeaderCell>Action</TableHeaderCell>
-            </tr>
-          </thead>
+        <table className="w-full min-w-[1100px] border-collapse text-sm">
+          <TealTableHead>
+            <TableHeaderCell>First Name</TableHeaderCell>
+            <TableHeaderCell>Last Name</TableHeaderCell>
+            <TableHeaderCell>Company Name</TableHeaderCell>
+            <TableHeaderCell>Phone Number</TableHeaderCell>
+            <TableHeaderCell>Address Line 1</TableHeaderCell>
+            <TableHeaderCell>Address Line 2</TableHeaderCell>
+            <TableHeaderCell>City</TableHeaderCell>
+            <TableHeaderCell>State</TableHeaderCell>
+            <TableHeaderCell>Zip</TableHeaderCell>
+            <TableHeaderCell>Group Name</TableHeaderCell>
+            <TableHeaderCell>Action</TableHeaderCell>
+          </TealTableHead>
           <tbody>
             {filtered.map((a) => (
               <tr key={a.id} className="border-t border-border">
@@ -128,6 +128,7 @@ export function ShippingTab({ addresses, onChange }: ShippingTabProps) {
                 <td className="px-4 py-3">{a.companyName}</td>
                 <td className="px-4 py-3">{a.phone}</td>
                 <td className="px-4 py-3">{a.address1}</td>
+                <td className="px-4 py-3">{a.address2}</td>
                 <td className="px-4 py-3">{a.city}</td>
                 <td className="px-4 py-3">{a.stateCode}</td>
                 <td className="px-4 py-3">{a.zip}</td>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { ClientInfo } from "@/components/edit-client/mock-client";
 import { US_STATES } from "@/components/edit-client/mock-client";
 import {
@@ -8,6 +7,7 @@ import {
   FormTextarea,
   PrimaryButton,
 } from "@/components/edit-client/SearchToolbar";
+import { BRAND } from "@/lib/brand";
 
 type ClientInfoTabProps = {
   value: ClientInfo;
@@ -20,8 +20,6 @@ export function ClientInfoTab({
   onChange,
   onSaveAndNext,
 }: ClientInfoTabProps) {
-  const [logoName, setLogoName] = useState(value.companyLogo);
-
   const set = <K extends keyof ClientInfo>(key: K, v: ClientInfo[K]) =>
     onChange({ ...value, [key]: v });
 
@@ -35,15 +33,7 @@ export function ClientInfoTab({
             onChange={(e) => set("companyName", e.target.value)}
           />
         </div>
-        <div className="md:col-span-3">
-          <FieldLabel>On-boarding Fee</FieldLabel>
-          <FormInput
-            type="number"
-            value={value.onboardingFee}
-            onChange={(e) => set("onboardingFee", e.target.value)}
-          />
-        </div>
-        <div className="hidden md:col-span-3 md:block" />
+        <div className="hidden md:col-span-6 md:block" />
 
         <div className="md:col-span-3">
           <FieldLabel required>First Name</FieldLabel>
@@ -119,6 +109,14 @@ export function ClientInfoTab({
           />
         </div>
 
+        <div className="md:col-span-6">
+          <FieldLabel>Notes</FieldLabel>
+          <FormTextarea
+            rows={5}
+            value={value.notes}
+            onChange={(e) => set("notes", e.target.value)}
+          />
+        </div>
         <div className="md:col-span-3">
           <FieldLabel required>Payment Required</FieldLabel>
           <div className="flex gap-4 pt-2 text-sm">
@@ -127,6 +125,7 @@ export function ClientInfoTab({
                 type="radio"
                 checked={value.paymentRequired}
                 onChange={() => set("paymentRequired", true)}
+                style={{ accentColor: BRAND.primary }}
               />
               Yes
             </label>
@@ -135,6 +134,7 @@ export function ClientInfoTab({
                 type="radio"
                 checked={!value.paymentRequired}
                 onChange={() => set("paymentRequired", false)}
+                style={{ accentColor: BRAND.primary }}
               />
               No
             </label>
@@ -148,6 +148,7 @@ export function ClientInfoTab({
                 type="radio"
                 checked={value.approvalRequired}
                 onChange={() => set("approvalRequired", true)}
+                style={{ accentColor: BRAND.primary }}
               />
               Yes
             </label>
@@ -156,72 +157,11 @@ export function ClientInfoTab({
                 type="radio"
                 checked={!value.approvalRequired}
                 onChange={() => set("approvalRequired", false)}
+                style={{ accentColor: BRAND.primary }}
               />
               No
             </label>
           </div>
-        </div>
-        <div className="md:col-span-3">
-          <FieldLabel required>Activate Reward Portal Menu</FieldLabel>
-          <FormSelect
-            value={value.rewardPortal}
-            onChange={(e) => set("rewardPortal", e.target.value)}
-          >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </FormSelect>
-        </div>
-        <div className="md:col-span-2">
-          <FieldLabel required>Active</FieldLabel>
-          <FormSelect
-            value={value.active}
-            onChange={(e) => set("active", e.target.value)}
-          >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </FormSelect>
-        </div>
-
-        <div className="md:col-span-6">
-          <FieldLabel>Notes</FieldLabel>
-          <FormTextarea
-            rows={5}
-            value={value.notes}
-            onChange={(e) => set("notes", e.target.value)}
-          />
-        </div>
-        <div className="md:col-span-6">
-          <div className="mb-1.5 flex items-center gap-2 text-sm font-medium">
-            <span>Company Logo</span>
-            {logoName && (
-              <>
-                <button type="button" className="text-[#3b6fe0] hover:underline">
-                  View
-                </button>
-                <button
-                  type="button"
-                  className="text-red-500"
-                  aria-label="Remove logo"
-                  onClick={() => {
-                    setLogoName("");
-                    set("companyLogo", "");
-                  }}
-                >
-                  ×
-                </button>
-              </>
-            )}
-          </div>
-          <FormInput
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              const name = file?.name ?? "";
-              setLogoName(name);
-              set("companyLogo", name);
-            }}
-          />
         </div>
       </div>
 
