@@ -154,13 +154,13 @@ export function EventForm({ initial }: EventFormProps) {
 
   const errorText = (key: keyof FormErrors) =>
     errors[key] ? (
-      <p className="mt-1 text-xs text-destructive">{errors[key]}</p>
+      <p className="mt-0.5 text-xs text-destructive">{errors[key]}</p>
     ) : null;
 
   return (
-    <div className="rounded-lg border border-border bg-white p-6 shadow-sm">
-      <div className="grid gap-4 md:grid-cols-2">
-        <div>
+    <div className="rounded-lg border border-border bg-white p-4 shadow-sm">
+      <div className="grid gap-x-4 gap-y-2.5 lg:grid-cols-3">
+        <div className="lg:col-span-2">
           <FieldLabel required>Event Name</FieldLabel>
           <FormInput
             value={form.eventName}
@@ -196,7 +196,7 @@ export function EventForm({ initial }: EventFormProps) {
           />
           {errorText("contactLastName")}
         </div>
-        <div className="md:col-span-2">
+        <div>
           <FieldLabel required>Contact Email</FieldLabel>
           <FormInput
             type="email"
@@ -225,13 +225,28 @@ export function EventForm({ initial }: EventFormProps) {
           />
           {errorText("toDate")}
         </div>
-      </div>
-
-      <h2 className="mb-3 mt-6 text-sm font-semibold uppercase tracking-wide text-[#495057]">
-        Event Address
-      </h2>
-      <div className="grid gap-4 md:grid-cols-2">
         <div>
+          <FieldLabel>Event Time Zone</FieldLabel>
+          <FormSelect
+            value={form.timeZone}
+            onChange={(e) =>
+              set("timeZone", e.target.value as InventoryEvent["timeZone"])
+            }
+          >
+            {EVENT_TIME_ZONES.map((tz) => (
+              <option key={tz.value} value={tz.value}>
+                {tz.label}
+              </option>
+            ))}
+          </FormSelect>
+        </div>
+
+        <div className="lg:col-span-3">
+          <h2 className="mb-1.5 mt-2 text-xs font-semibold uppercase tracking-wide text-[#495057]">
+            Event Address
+          </h2>
+        </div>
+        <div className="lg:col-span-2">
           <FieldLabel required>Address 1</FieldLabel>
           <FormInput
             value={form.address1}
@@ -284,39 +299,31 @@ export function EventForm({ initial }: EventFormProps) {
           />
           {errorText("zipCode")}
         </div>
-        <div>
-          <FieldLabel>Event Time Zone</FieldLabel>
-          <FormSelect
-            value={form.timeZone}
-            onChange={(e) =>
-              set("timeZone", e.target.value as InventoryEvent["timeZone"])
-            }
-          >
-            {EVENT_TIME_ZONES.map((tz) => (
-              <option key={tz.value} value={tz.value}>
-                {tz.label}
-              </option>
-            ))}
-          </FormSelect>
-        </div>
-        <div className="md:col-span-2">
+
+        <div className="lg:col-span-3">
           <FieldLabel>Short Description</FieldLabel>
           <FormTextarea
             value={form.shortDescription}
             maxLength={500}
-            rows={3}
+            rows={2}
+            className="resize-y"
             onChange={(e) => set("shortDescription", e.target.value)}
           />
           {errorText("shortDescription")}
         </div>
-        <div className="md:col-span-2">
+
+        <div className="lg:col-span-3">
           <FieldLabel>Description</FieldLabel>
           <RichTextEditor
             value={form.description}
+            minHeight={420}
             onChange={(html) => set("description", html)}
           />
         </div>
-        <div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-end justify-between gap-3 border-t border-border pt-4">
+        <div className="w-48">
           <FieldLabel>Status</FieldLabel>
           <FormSelect
             value={form.status}
@@ -331,11 +338,10 @@ export function EventForm({ initial }: EventFormProps) {
             ))}
           </FormSelect>
         </div>
-      </div>
-
-      <div className="mt-6 flex gap-2">
-        <PrimaryButton onClick={save}>Save</PrimaryButton>
-        <PrimaryButton onClick={cancel}>Cancel</PrimaryButton>
+        <div className="flex gap-2">
+          <PrimaryButton onClick={save}>Save</PrimaryButton>
+          <PrimaryButton onClick={cancel}>Cancel</PrimaryButton>
+        </div>
       </div>
     </div>
   );

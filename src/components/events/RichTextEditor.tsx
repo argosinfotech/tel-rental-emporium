@@ -8,9 +8,14 @@ import { BRAND } from "@/lib/brand";
 type RichTextEditorProps = {
   value: string;
   onChange: (html: string) => void;
+  minHeight?: number;
 };
 
-export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+export function RichTextEditor({
+  value,
+  onChange,
+  minHeight = 140,
+}: RichTextEditorProps) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -26,8 +31,8 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     },
     editorProps: {
       attributes: {
-        class:
-          "min-h-[140px] px-3 py-2 text-sm outline-none prose prose-sm max-w-none",
+        class: "px-3 py-2 text-sm outline-none prose prose-sm max-w-none",
+        style: `min-height:${minHeight}px;`,
       },
     },
   });
