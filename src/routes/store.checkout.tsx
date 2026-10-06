@@ -114,17 +114,17 @@ function CheckoutPage() {
   };
 
   const fieldClass =
-    "mt-1 w-full rounded border border-[#ddd] bg-white px-3 py-2 text-sm outline-none focus:border-[#0b8a7a]";
+    "mt-0.5 w-full rounded border border-[#ddd] bg-white px-3 py-1.5 text-sm outline-none focus:border-[#0b8a7a]";
 
   return (
     <div className="bg-[#f5f5f5]">
       <CheckoutProgress current="checkout" />
       <form
         onSubmit={placeOrder}
-        className="mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[1fr_360px] sm:px-6"
+        className="mx-auto grid max-w-6xl gap-5 px-4 py-6 lg:grid-cols-[1fr_360px] sm:px-6"
       >
-        <div className="space-y-6">
-          <div className="space-y-1 text-sm">
+        <div className="space-y-4">
+          <div className="space-y-0.5 text-sm">
             <p>
               <button
                 type="button"
@@ -145,11 +145,11 @@ function CheckoutPage() {
             </p>
           </div>
 
-          <div className="rounded-lg bg-white p-6 shadow-sm">
+          <div className="rounded-lg bg-white p-4 shadow-sm sm:p-5">
             <h2 className="text-sm font-bold uppercase tracking-wide">
               Billing Details
             </h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className="mt-3 grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
               <div>
                 <label className="text-sm">
                   First name <span className="text-red-500">*</span>
@@ -186,57 +186,61 @@ function CheckoutPage() {
                 <label className="text-sm">
                   Street address <span className="text-red-500">*</span>
                 </label>
-                <input
-                  className={fieldClass}
-                  placeholder="House number and street name"
-                  value={form.address1}
-                  onChange={(e) => set("address1", e.target.value)}
-                />
-                <input
-                  className={`${fieldClass} mt-2`}
-                  placeholder="Apartment, suite, unit, etc. (optional)"
-                  value={form.address2}
-                  onChange={(e) => set("address2", e.target.value)}
-                />
+                <div className="mt-0.5 grid gap-x-3 gap-y-2.5 sm:grid-cols-[1.4fr_1fr]">
+                  <input
+                    className="w-full rounded border border-[#ddd] bg-white px-3 py-1.5 text-sm outline-none focus:border-[#0b8a7a]"
+                    placeholder="House number and street name"
+                    value={form.address1}
+                    onChange={(e) => set("address1", e.target.value)}
+                  />
+                  <input
+                    className="w-full rounded border border-[#ddd] bg-white px-3 py-1.5 text-sm outline-none focus:border-[#0b8a7a]"
+                    placeholder="Apartment, suite, unit, etc. (optional)"
+                    value={form.address2}
+                    onChange={(e) => set("address2", e.target.value)}
+                  />
+                </div>
               </div>
-              <div className="sm:col-span-2">
-                <label className="text-sm">
-                  Town / City <span className="text-red-500">*</span>
-                </label>
-                <input
-                  className={fieldClass}
-                  value={form.city}
-                  onChange={(e) => set("city", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="text-sm">
-                  State <span className="text-red-500">*</span>
-                </label>
-                <select
-                  className={fieldClass}
-                  value={form.stateCode}
-                  onChange={(e) => set("stateCode", e.target.value)}
-                >
-                  {US_STATES.map((s) => (
-                    <option key={s.code} value={s.code}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="text-sm">
-                  ZIP Code <span className="text-red-500">*</span>
-                </label>
-                <input
-                  className={fieldClass}
-                  maxLength={5}
-                  value={form.zip}
-                  onChange={(e) =>
-                    set("zip", e.target.value.replace(/\D/g, "").slice(0, 5))
-                  }
-                />
+              <div className="sm:col-span-2 grid gap-x-3 gap-y-2.5 sm:grid-cols-[1.4fr_1fr_0.8fr]">
+                <div>
+                  <label className="text-sm">
+                    Town / City <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    className={fieldClass}
+                    value={form.city}
+                    onChange={(e) => set("city", e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm">
+                    State <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className={fieldClass}
+                    value={form.stateCode}
+                    onChange={(e) => set("stateCode", e.target.value)}
+                  >
+                    {US_STATES.map((s) => (
+                      <option key={s.code} value={s.code}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm">
+                    ZIP Code <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    className={fieldClass}
+                    maxLength={5}
+                    value={form.zip}
+                    onChange={(e) =>
+                      set("zip", e.target.value.replace(/\D/g, "").slice(0, 5))
+                    }
+                  />
+                </div>
               </div>
               <div>
                 <label className="text-sm">Phone (optional)</label>
@@ -260,22 +264,40 @@ function CheckoutPage() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-[#e8e0d5] bg-[#f7f2ea] p-6">
-            <h2 className="text-lg font-bold">Booth delivery</h2>
-            <p className="mt-2 text-sm text-[#555]">
-              Your rental will be delivered to {event.eventName}. Booth number
-              and a contact mobile are required.
+          <div className="rounded-lg bg-white p-4 shadow-sm sm:p-5">
+            <h2 className="text-sm font-bold uppercase tracking-wide">
+              Booth delivery
+            </h2>
+            <p className="mt-1.5 text-sm text-[#555]">
+              Delivered to the event booth. Booth # and contact mobile are
+              required.
             </p>
-            <div className="mt-3 text-sm text-[#444]">
-              <p>{event.address1}</p>
-              {event.address2 ? <p>{event.address2}</p> : null}
-              <p>
-                {event.city}, {event.stateCode} {event.zipCode}
-              </p>
-              <p>United States (US)</p>
-            </div>
-            <div className="mt-4 space-y-3 rounded-md border border-[#e5dccf] bg-[#faf6f0] p-4">
-              <div>
+
+            <dl className="mt-3 grid gap-x-6 gap-y-2 rounded-md bg-[#f7f2ea] px-3 py-2.5 text-sm sm:grid-cols-2">
+              <div className="min-w-0">
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Event
+                </dt>
+                <dd className="truncate text-[#495057]">{event.eventName}</dd>
+              </div>
+              <div className="min-w-0">
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Venue
+                </dt>
+                <dd className="text-[#495057]">
+                  {[
+                    event.address1,
+                    event.address2,
+                    `${event.city}, ${event.stateCode} ${event.zipCode}`,
+                  ]
+                    .filter(Boolean)
+                    .join(", ")}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-3 grid gap-x-3 gap-y-2.5 sm:grid-cols-2">
+              <div className="sm:col-span-2">
                 <label className="text-sm">
                   Booth# / Exhibiting Company Name{" "}
                   <span className="text-red-500">*</span>
@@ -307,45 +329,45 @@ function CheckoutPage() {
                   onChange={(e) => set("contactMobile", e.target.value)}
                 />
               </div>
-            </div>
-            <div className="mt-4">
-              <label className="text-sm">
-                Order notes <span className="text-[#888]">(optional)</span>
-              </label>
-              <textarea
-                rows={4}
-                className={fieldClass}
-                placeholder="Notes about your order, e.g. special notes for delivery."
-                value={form.notes}
-                onChange={(e) => set("notes", e.target.value)}
-              />
+              <div className="sm:col-span-2">
+                <label className="text-sm">
+                  Order notes <span className="text-[#888]">(optional)</span>
+                </label>
+                <textarea
+                  rows={2}
+                  className={fieldClass}
+                  placeholder="Notes about your order, e.g. special notes for delivery."
+                  value={form.notes}
+                  onChange={(e) => set("notes", e.target.value)}
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <aside className="h-fit">
-          <div className="rounded-lg bg-white p-5 shadow-sm">
+        <aside className="h-fit lg:sticky lg:top-4">
+          <div className="rounded-lg bg-white p-4 shadow-sm sm:p-5">
             <h2 className="text-sm font-bold uppercase tracking-wide">
               Your Order
             </h2>
-            <div className="mt-4 space-y-3 border-t border-[#eee] pt-4 text-sm">
+            <div className="mt-3 space-y-2 border-t border-[#eee] pt-3 text-sm">
               {cart.map((line) => (
-                <div key={line.id} className="border-b border-[#eee] pb-3">
+                <div key={line.id} className="border-b border-[#eee] pb-2">
                   <div className="flex justify-between gap-2">
-                    <p className="font-medium">
+                    <p className="font-medium leading-snug">
                       {line.title}
                       {line.variantLabel ? ` - ${line.variantLabel}` : ""} ×{" "}
                       {line.quantity}
                     </p>
                     <p>{formatMoney(line.unitPrice * line.quantity)}</p>
                   </div>
-                  <p className="mt-1 text-xs text-[#888]">
+                  <p className="mt-0.5 text-xs leading-snug text-[#888]">
                     Rent from: {formatLongDate(event.fromDate)}
                   </p>
-                  <p className="text-xs text-[#888]">
+                  <p className="text-xs leading-snug text-[#888]">
                     Rent to: {formatLongDate(event.toDate)}
                   </p>
-                  <p className="text-xs text-[#888]">
+                  <p className="text-xs leading-snug text-[#888]">
                     Rental return within: 3 days ({returnBy})
                   </p>
                 </div>
@@ -366,12 +388,12 @@ function CheckoutPage() {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-4">
               <p className="flex items-center gap-2 text-sm font-medium">
                 <CreditCard className="h-4 w-4" />
                 Credit / Debit Card
               </p>
-              <div className="mt-3 space-y-3 rounded border border-[#ddd] p-3">
+              <div className="mt-2 space-y-2 rounded border border-[#ddd] p-2.5">
                 <input
                   className={fieldClass}
                   placeholder="1234 1234 1234 1234"
@@ -393,7 +415,7 @@ function CheckoutPage() {
                   />
                 </div>
               </div>
-              <p className="mt-3 text-xs leading-relaxed text-[#666]">
+              <p className="mt-2 text-xs leading-snug text-[#666]">
                 Your personal data will be used to process your order, support
                 your experience throughout this website, and for other purposes
                 described in our{" "}
@@ -406,11 +428,11 @@ function CheckoutPage() {
                 .
               </p>
               {error && (
-                <p className="mt-3 text-sm text-red-600">{error}</p>
+                <p className="mt-2 text-sm text-red-600">{error}</p>
               )}
               <button
                 type="submit"
-                className="mt-4 w-full rounded py-3 text-sm font-semibold uppercase tracking-wide text-white"
+                className="mt-3 w-full rounded py-2.5 text-sm font-semibold uppercase tracking-wide text-white"
                 style={{ backgroundColor: BRAND.primary }}
               >
                 Place Order
