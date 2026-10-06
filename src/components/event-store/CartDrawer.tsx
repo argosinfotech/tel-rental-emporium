@@ -7,10 +7,8 @@ import {
   removeFromCart,
   updateCartQuantity,
 } from "@/lib/event-store-session";
-import {
-  eventReturnByDate,
-  formatLongDate,
-} from "@/lib/mock-events";
+import { eventReturnByDate, formatLongDate } from "@/lib/mock-events";
+import { getStoreProduct } from "@/lib/mock-store-products";
 import { useStoreContext } from "@/components/event-store/StoreShell";
 
 type CartDrawerProps = {
@@ -30,53 +28,62 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
       <button
         type="button"
         aria-label="Close cart overlay"
-        className="absolute inset-0 bg-black/40"
+        className="absolute inset-0 bg-black/50"
         onClick={onClose}
       />
-      <aside className="relative z-10 flex h-full w-full max-w-md flex-col bg-[#2a2a2a] text-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-          <h2 className="text-lg font-semibold">Shopping cart</h2>
+      <aside className="relative z-10 flex h-full w-full max-w-md flex-col bg-black text-white shadow-xl">
+        <div className="flex items-center justify-between px-5 py-4">
+          <h2 className="text-base font-medium">Shopping cart</h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-sm underline underline-offset-2 hover:opacity-80"
+            className="inline-flex items-center gap-1.5 text-sm text-white hover:opacity-80"
           >
+            <X className="h-4 w-4" />
             Close
           </button>
         </div>
 
-        <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+        <div className="flex-1 space-y-5 overflow-y-auto px-5 pb-4">
           {cart.length === 0 && (
             <p className="text-sm text-white/60">Your cart is empty.</p>
           )}
-          {cart.map((line) => (
-            <div
-              key={line.id}
-              className="relative flex gap-3 border-b border-white/10 pb-4"
-            >
-              <div
-                className="h-16 w-16 shrink-0 rounded bg-white/90"
-                style={{ backgroundColor: "#f0f0f0" }}
-              />
-              <div className="min-w-0 flex-1 pr-6">
-                <p className="text-sm font-medium leading-snug">
-                  {line.title}
-                  {line.variantLabel ? ` - ${line.variantLabel}` : ""}
-                </p>
-                <p className="mt-1 text-xs text-white/60">
-                  Rent from: {formatLongDate(event.fromDate)}
-                </p>
-                <p className="text-xs text-white/60">
-                  Rent to: {formatLongDate(event.toDate)}
-                </p>
-                <p className="text-xs text-white/60">
-                  Rental return within: 3 days ({returnBy})
-                </p>
-                <div className="mt-2 flex items-center gap-3">
-                  <div className="flex items-center overflow-hidden rounded border border-white/20 bg-white text-black">
+          {cart.map((line) => {
+            const product = getStoreProduct(line.productId);
+            return (
+              <div key={line.id} className="relative flex gap-4">
+                <div className="h-[72px] w-[72px] shrink-0 overflow-hidden bg-white">
+                  {product?.imageSrc ? (
+                    <img
+                      src={product.imageSrc}
+                      alt=""
+                      className="h-full w-full object-contain p-1"
+                    />
+                  ) : null}
+                </div>
+                <div className="min-w-0 flex-1 pr-5">
+                  <p className="text-sm font-semibold leading-snug text-white">
+                    {line.title}
+                    {line.variantLabel ? ` - ${line.variantLabel}` : ""}
+                  </p>
+                  <div className="mt-2 space-y-0.5 text-xs leading-relaxed text-white">
+                    <p>
+                      <span className="font-semibold">Rent from:</span>{" "}
+                      {formatLongDate(event.fromDate)}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Rent to:</span>{" "}
+                      {formatLongDate(event.toDate)}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Rental return within:</span>{" "}
+                      3 days ({returnBy})
+                    </p>
+                  </div>
+                  <div className="mt-3 inline-flex items-stretch overflow-hidden border border-[#555] text-sm">
                     <button
                       type="button"
-                      className="px-2 py-1 text-sm"
+                      className="px-2.5 py-1 hover:bg-white/10"
                       onClick={() => {
                         updateCartQuantity(line.id, line.quantity - 1);
                         refreshCart();
@@ -84,12 +91,12 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                     >
                       −
                     </button>
-                    <span className="min-w-8 px-1 text-center text-sm">
+                    <span className="min-w-8 border-x border-[#555] px-2 py-1 text-center">
                       {line.quantity}
                     </span>
                     <button
                       type="button"
-                      className="px-2 py-1 text-sm"
+                      className="px-2.5 py-1 hover:bg-white/10"
                       onClick={() => {
                         updateCartQuantity(line.id, line.quantity + 1);
                         refreshCart();
@@ -98,29 +105,32 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       +
                     </button>
                   </div>
-                  <span className="text-sm" style={{ color: BRAND.primary }}>
-                    {line.quantity} × {formatMoney(line.unitPrice)}
-                  </span>
+                  <p className="mt-2 text-sm">
+                    <span className="text-white">{line.quantity} × </span>
+                    <span style={{ color: BRAND.primary }}>
+                      {formatMoney(line.unitPrice)}
+                    </span>
+                  </p>
                 </div>
+                <button
+                  type="button"
+                  aria-label="Remove item"
+                  className="absolute right-0 top-0 text-white/70 hover:text-white"
+                  onClick={() => {
+                    removeFromCart(line.id);
+                    refreshCart();
+                  }}
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
               </div>
-              <button
-                type="button"
-                aria-label="Remove item"
-                className="absolute right-0 top-0 text-white/50 hover:text-white"
-                onClick={() => {
-                  removeFromCart(line.id);
-                  refreshCart();
-                }}
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="space-y-3 border-t border-white/10 px-5 py-4">
+        <div className="space-y-3 px-5 py-5">
           <div className="flex items-center justify-between text-sm">
-            <span>Subtotal:</span>
+            <span className="font-semibold">Subtotal:</span>
             <span className="font-semibold" style={{ color: BRAND.primary }}>
               {formatMoney(subtotal)}
             </span>
@@ -128,7 +138,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
           <Link
             to="/store/cart"
             onClick={onClose}
-            className="block w-full rounded-md py-3 text-center text-sm font-semibold uppercase tracking-wide text-white"
+            className="block w-full py-3 text-center text-sm font-semibold uppercase tracking-wide text-white"
             style={{ backgroundColor: BRAND.primary }}
           >
             View Cart
@@ -136,7 +146,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
           <Link
             to="/store/checkout"
             onClick={onClose}
-            className="block w-full rounded-md py-3 text-center text-sm font-semibold uppercase tracking-wide text-white"
+            className="block w-full py-3 text-center text-sm font-semibold uppercase tracking-wide text-white"
             style={{ backgroundColor: BRAND.primary }}
           >
             Checkout

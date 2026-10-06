@@ -16,6 +16,7 @@ export type StoreProduct = {
   sizes: string[];
   variants: StoreProductVariant[];
   imageColor: string;
+  imageSrc: string;
 };
 
 export const STORE_PRODUCTS: StoreProduct[] = [
@@ -33,6 +34,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     sizes: [],
     variants: [],
     imageColor: "#e8eef2",
+    imageSrc: "/store/cube-shelf.jpg",
   },
   {
     id: "bi-fold-tables",
@@ -58,6 +60,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       { label: "6-Foot Round Table", price: 50 },
     ],
     imageColor: "#f4f4f4",
+    imageSrc: "/store/bi-fold-tables.jpg",
   },
   {
     id: "folding-chair",
@@ -72,6 +75,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     sizes: [],
     variants: [],
     imageColor: "#eef6f4",
+    imageSrc: "/store/folding-chair.jpg",
   },
   {
     id: "cocktail-table",
@@ -86,6 +90,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     sizes: [],
     variants: [],
     imageColor: "#f0ece6",
+    imageSrc: "/store/cocktail-table.jpg",
   },
   {
     id: "literature-rack",
@@ -100,6 +105,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     sizes: [],
     variants: [],
     imageColor: "#e9f0fa",
+    imageSrc: "/store/literature-rack.jpg",
   },
   {
     id: "banner-stand",
@@ -114,6 +120,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     sizes: [],
     variants: [],
     imageColor: "#f5eee8",
+    imageSrc: "/store/banner-stand.jpg",
   },
 ];
 

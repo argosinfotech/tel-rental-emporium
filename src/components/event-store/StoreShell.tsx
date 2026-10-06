@@ -94,25 +94,22 @@ export function StoreShell({
 
   return (
     <StoreContext.Provider value={value}>
-      <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a]">
+      <div className="flex min-h-screen flex-col bg-white font-sans text-[#1a1a1a] antialiased [font-family:Open_Sans,ui-sans-serif,system-ui,sans-serif]">
         {showEventBar && (
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#2a2a2a] px-4 py-2 text-xs text-white sm:px-6">
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <span
-                className="text-[10px] font-semibold uppercase tracking-wider"
-                style={{ color: BRAND.primary }}
-              >
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-[#222] px-4 py-2 text-[11px] leading-none text-white sm:px-6 sm:text-xs">
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 sm:gap-x-3">
+              <span className="font-semibold uppercase tracking-[0.12em] text-white">
                 Current Event
               </span>
-              <span className="text-sm font-medium">{event.eventName}</span>
+              <span className="font-medium text-white">{event.eventName}</span>
               <span className="text-white/70">
                 {formatEventDateRange(event)}
               </span>
-              <span className="rounded bg-[#555] px-2 py-0.5 text-[10px] font-semibold tracking-wide">
+              <span className="rounded-sm bg-[#555] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-white">
                 {event.eventCode}
               </span>
             </div>
-            <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-4 text-xs text-white sm:text-sm">
               <button
                 type="button"
                 onClick={changeEvent}
@@ -131,31 +128,30 @@ export function StoreShell({
           </div>
         )}
 
-        <header className="flex items-center justify-between gap-4 bg-black px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-6">
-            <Link to="/store/home" className="flex items-center gap-2">
-              <span
-                className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white"
-                style={{ backgroundColor: BRAND.primary }}
-              >
-                TEL
-              </span>
-              <span className="text-sm font-semibold text-white">
-                The Event Lounge
-              </span>
+        <header className="flex h-[60px] items-center justify-between gap-4 bg-black px-4 sm:h-[72px] sm:px-6">
+          <div className="flex min-w-0 items-center gap-6 sm:gap-10">
+            <Link
+              to="/store/home"
+              className="flex h-full shrink-0 items-center"
+              aria-label="The Event Lounge home"
+            >
+              <img
+                src="/event-lounge-logo.webp"
+                alt="The Event Lounge"
+                className="h-10 w-auto max-w-[210px] object-contain object-left sm:h-12 sm:max-w-[260px]"
+              />
             </Link>
             <Link
               to="/store/home"
-              className="text-xs font-semibold uppercase tracking-wide text-white hover:opacity-80"
-              style={{ color: BRAND.primary }}
+              className="text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:opacity-80"
             >
               Home
             </Link>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 sm:gap-3.5">
             <Link
               to="/store/shop"
-              className="rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-white"
+              className="rounded-full px-5 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-white"
               style={{ backgroundColor: BRAND.primary }}
             >
               Shop
@@ -164,20 +160,19 @@ export function StoreShell({
               type="button"
               aria-label="Open cart"
               onClick={() => setCartOpen(true)}
-              className="relative rounded-full border border-white/30 p-2 text-white hover:bg-white/10"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 hover:bg-white/5"
+              style={{ borderColor: BRAND.primary, color: "#fff" }}
             >
               <ShoppingCart className="h-4 w-4" />
-              <span
-                className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-black"
-                style={{ backgroundColor: "#fff" }}
-              >
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-white px-1 text-[10px] font-bold text-[#1a1a1a]">
                 {count}
               </span>
             </button>
             <button
               type="button"
               aria-label="Account"
-              className="rounded-full border border-white/30 p-2 text-white hover:bg-white/10"
+              className="flex h-9 w-9 items-center justify-center rounded-full border-2 hover:bg-white/5"
+              style={{ borderColor: BRAND.primary, color: "#fff" }}
             >
               <UserRound className="h-4 w-4" />
             </button>
