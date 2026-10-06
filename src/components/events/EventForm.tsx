@@ -48,6 +48,7 @@ export function EventForm({ initial }: EventFormProps) {
           shortDescription: initial.shortDescription,
           description: initial.description,
           status: initial.status,
+          logoUrl: initial.logoUrl,
         }
       : emptyEventForm(),
   );
@@ -140,6 +141,7 @@ export function EventForm({ initial }: EventFormProps) {
       shortDescription: form.shortDescription.trim(),
       description: form.description,
       status: form.status,
+      logoUrl: form.logoUrl,
     };
     if (initial?.id) {
       payload.id = initial.id;
@@ -322,25 +324,59 @@ export function EventForm({ initial }: EventFormProps) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-end justify-between gap-3 border-t border-border pt-4">
-        <div className="w-48">
-          <FieldLabel>Status</FieldLabel>
-          <FormSelect
-            value={form.status}
-            onChange={(e) =>
-              set("status", e.target.value as InventoryEvent["status"])
-            }
-          >
-            {EVENT_STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </FormSelect>
+      <div className="mt-4 grid grid-cols-1 items-end gap-3 border-t border-border pt-4 md:grid-cols-12">
+        <div className="md:col-span-6">
+          <FieldLabel>Event Logo</FieldLabel>
+          <FormInput
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = () => {
+                set("logoUrl", String(reader.result ?? ""));
+              };
+              reader.readAsDataURL(file);
+            }}
+          />
+          {form.logoUrl ? (
+            <div className="mt-2 flex items-center gap-3">
+              <img
+                src={form.logoUrl}
+                alt="Event logo preview"
+                className="h-12 w-12 rounded-md border border-border bg-white object-contain"
+              />
+              <button
+                type="button"
+                className="text-sm text-destructive hover:underline"
+                onClick={() => set("logoUrl", "")}
+              >
+                Remove logo
+              </button>
+            </div>
+          ) : null}
         </div>
-        <div className="flex gap-2">
-          <PrimaryButton onClick={save}>Save</PrimaryButton>
-          <PrimaryButton onClick={cancel}>Cancel</PrimaryButton>
+        <div className="flex flex-wrap items-end justify-between gap-3 md:col-span-6">
+          <div className="w-48">
+            <FieldLabel>Status</FieldLabel>
+            <FormSelect
+              value={form.status}
+              onChange={(e) =>
+                set("status", e.target.value as InventoryEvent["status"])
+              }
+            >
+              {EVENT_STATUSES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </FormSelect>
+          </div>
+          <div className="flex gap-2">
+            <PrimaryButton onClick={save}>Save</PrimaryButton>
+            <PrimaryButton onClick={cancel}>Cancel</PrimaryButton>
+          </div>
         </div>
       </div>
     </div>

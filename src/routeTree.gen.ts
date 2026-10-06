@@ -30,8 +30,11 @@ import { Route as DashboardEventsNewRouteImport } from './routes/dashboard.event
 import { Route as DashboardEventsOrdersRouteImport } from './routes/dashboard.events.orders'
 import { Route as StoreShopIndexRouteImport } from './routes/store.shop.index'
 import { Route as StoreShopProductIdRouteImport } from './routes/store.shop.$productId'
+import { Route as DashboardEventsOrderReturnOrderIdRouteImport } from './routes/dashboard.events.order-return.$orderId'
+import { Route as DashboardEventsOrderOrderIdRouteImport } from './routes/dashboard.events.order.$orderId'
 import { Route as DashboardEventsOrdersIndexRouteImport } from './routes/dashboard.events.orders.index'
-import { Route as DashboardEventsOrdersOrderIdRouteImport } from './routes/dashboard.events.orders.$orderId'
+import { Route as DashboardEventsOrdersStatusRouteImport } from './routes/dashboard.events.orders.$status'
+import { Route as DashboardEventsOrdersReturnsRouteImport } from './routes/dashboard.events.orders.returns'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -139,16 +142,34 @@ const StoreShopProductIdRoute = StoreShopProductIdRouteImport.update({
   path: '/$productId',
   getParentRoute: () => StoreShopRoute,
 } as any)
+const DashboardEventsOrderReturnOrderIdRoute =
+  DashboardEventsOrderReturnOrderIdRouteImport.update({
+    id: '/order-return/$orderId',
+    path: '/order-return/$orderId',
+    getParentRoute: () => DashboardEventsRoute,
+  } as any)
+const DashboardEventsOrderOrderIdRoute =
+  DashboardEventsOrderOrderIdRouteImport.update({
+    id: '/order/$orderId',
+    path: '/order/$orderId',
+    getParentRoute: () => DashboardEventsRoute,
+  } as any)
 const DashboardEventsOrdersIndexRoute =
   DashboardEventsOrdersIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => DashboardEventsOrdersRoute,
   } as any)
-const DashboardEventsOrdersOrderIdRoute =
-  DashboardEventsOrdersOrderIdRouteImport.update({
-    id: '/$orderId',
-    path: '/$orderId',
+const DashboardEventsOrdersStatusRoute =
+  DashboardEventsOrdersStatusRouteImport.update({
+    id: '/$status',
+    path: '/$status',
+    getParentRoute: () => DashboardEventsOrdersRoute,
+  } as any)
+const DashboardEventsOrdersReturnsRoute =
+  DashboardEventsOrdersReturnsRouteImport.update({
+    id: '/returns',
+    path: '/returns',
     getParentRoute: () => DashboardEventsOrdersRoute,
   } as any)
 
@@ -174,7 +195,10 @@ export interface FileRoutesByFullPath {
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
   '/store/shop/': typeof StoreShopIndexRoute
-  '/dashboard/events/orders/$orderId': typeof DashboardEventsOrdersOrderIdRoute
+  '/dashboard/events/order-return/$orderId': typeof DashboardEventsOrderReturnOrderIdRoute
+  '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
+  '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
+  '/dashboard/events/orders/returns': typeof DashboardEventsOrdersReturnsRoute
   '/dashboard/events/orders/': typeof DashboardEventsOrdersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -194,7 +218,10 @@ export interface FileRoutesByTo {
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events': typeof DashboardEventsIndexRoute
   '/store/shop': typeof StoreShopIndexRoute
-  '/dashboard/events/orders/$orderId': typeof DashboardEventsOrdersOrderIdRoute
+  '/dashboard/events/order-return/$orderId': typeof DashboardEventsOrderReturnOrderIdRoute
+  '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
+  '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
+  '/dashboard/events/orders/returns': typeof DashboardEventsOrdersReturnsRoute
   '/dashboard/events/orders': typeof DashboardEventsOrdersIndexRoute
 }
 export interface FileRoutesById {
@@ -220,7 +247,10 @@ export interface FileRoutesById {
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
   '/store/shop/': typeof StoreShopIndexRoute
-  '/dashboard/events/orders/$orderId': typeof DashboardEventsOrdersOrderIdRoute
+  '/dashboard/events/order-return/$orderId': typeof DashboardEventsOrderReturnOrderIdRoute
+  '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
+  '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
+  '/dashboard/events/orders/returns': typeof DashboardEventsOrdersReturnsRoute
   '/dashboard/events/orders/': typeof DashboardEventsOrdersIndexRoute
 }
 export interface FileRouteTypes {
@@ -247,7 +277,10 @@ export interface FileRouteTypes {
     | '/store/shop/$productId'
     | '/dashboard/events/'
     | '/store/shop/'
-    | '/dashboard/events/orders/$orderId'
+    | '/dashboard/events/order-return/$orderId'
+    | '/dashboard/events/order/$orderId'
+    | '/dashboard/events/orders/$status'
+    | '/dashboard/events/orders/returns'
     | '/dashboard/events/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -267,7 +300,10 @@ export interface FileRouteTypes {
     | '/store/shop/$productId'
     | '/dashboard/events'
     | '/store/shop'
-    | '/dashboard/events/orders/$orderId'
+    | '/dashboard/events/order-return/$orderId'
+    | '/dashboard/events/order/$orderId'
+    | '/dashboard/events/orders/$status'
+    | '/dashboard/events/orders/returns'
     | '/dashboard/events/orders'
   id:
     | '__root__'
@@ -292,7 +328,10 @@ export interface FileRouteTypes {
     | '/store/shop/$productId'
     | '/dashboard/events/'
     | '/store/shop/'
-    | '/dashboard/events/orders/$orderId'
+    | '/dashboard/events/order-return/$orderId'
+    | '/dashboard/events/order/$orderId'
+    | '/dashboard/events/orders/$status'
+    | '/dashboard/events/orders/returns'
     | '/dashboard/events/orders/'
   fileRoutesById: FileRoutesById
 }
@@ -452,6 +491,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreShopProductIdRouteImport
       parentRoute: typeof StoreShopRoute
     }
+    '/dashboard/events/order-return/$orderId': {
+      id: '/dashboard/events/order-return/$orderId'
+      path: '/order-return/$orderId'
+      fullPath: '/dashboard/events/order-return/$orderId'
+      preLoaderRoute: typeof DashboardEventsOrderReturnOrderIdRouteImport
+      parentRoute: typeof DashboardEventsRoute
+    }
+    '/dashboard/events/order/$orderId': {
+      id: '/dashboard/events/order/$orderId'
+      path: '/order/$orderId'
+      fullPath: '/dashboard/events/order/$orderId'
+      preLoaderRoute: typeof DashboardEventsOrderOrderIdRouteImport
+      parentRoute: typeof DashboardEventsRoute
+    }
     '/dashboard/events/orders/': {
       id: '/dashboard/events/orders/'
       path: '/'
@@ -459,23 +512,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEventsOrdersIndexRouteImport
       parentRoute: typeof DashboardEventsOrdersRoute
     }
-    '/dashboard/events/orders/$orderId': {
-      id: '/dashboard/events/orders/$orderId'
-      path: '/$orderId'
-      fullPath: '/dashboard/events/orders/$orderId'
-      preLoaderRoute: typeof DashboardEventsOrdersOrderIdRouteImport
+    '/dashboard/events/orders/$status': {
+      id: '/dashboard/events/orders/$status'
+      path: '/$status'
+      fullPath: '/dashboard/events/orders/$status'
+      preLoaderRoute: typeof DashboardEventsOrdersStatusRouteImport
+      parentRoute: typeof DashboardEventsOrdersRoute
+    }
+    '/dashboard/events/orders/returns': {
+      id: '/dashboard/events/orders/returns'
+      path: '/returns'
+      fullPath: '/dashboard/events/orders/returns'
+      preLoaderRoute: typeof DashboardEventsOrdersReturnsRouteImport
       parentRoute: typeof DashboardEventsOrdersRoute
     }
   }
 }
 
 interface DashboardEventsOrdersRouteChildren {
-  DashboardEventsOrdersOrderIdRoute: typeof DashboardEventsOrdersOrderIdRoute
+  DashboardEventsOrdersStatusRoute: typeof DashboardEventsOrdersStatusRoute
+  DashboardEventsOrdersReturnsRoute: typeof DashboardEventsOrdersReturnsRoute
   DashboardEventsOrdersIndexRoute: typeof DashboardEventsOrdersIndexRoute
 }
 
 const DashboardEventsOrdersRouteChildren: DashboardEventsOrdersRouteChildren = {
-  DashboardEventsOrdersOrderIdRoute: DashboardEventsOrdersOrderIdRoute,
+  DashboardEventsOrdersStatusRoute: DashboardEventsOrdersStatusRoute,
+  DashboardEventsOrdersReturnsRoute: DashboardEventsOrdersReturnsRoute,
   DashboardEventsOrdersIndexRoute: DashboardEventsOrdersIndexRoute,
 }
 
@@ -489,6 +551,8 @@ interface DashboardEventsRouteChildren {
   DashboardEventsNewRoute: typeof DashboardEventsNewRoute
   DashboardEventsOrdersRoute: typeof DashboardEventsOrdersRouteWithChildren
   DashboardEventsIndexRoute: typeof DashboardEventsIndexRoute
+  DashboardEventsOrderReturnOrderIdRoute: typeof DashboardEventsOrderReturnOrderIdRoute
+  DashboardEventsOrderOrderIdRoute: typeof DashboardEventsOrderOrderIdRoute
 }
 
 const DashboardEventsRouteChildren: DashboardEventsRouteChildren = {
@@ -496,6 +560,9 @@ const DashboardEventsRouteChildren: DashboardEventsRouteChildren = {
   DashboardEventsNewRoute: DashboardEventsNewRoute,
   DashboardEventsOrdersRoute: DashboardEventsOrdersRouteWithChildren,
   DashboardEventsIndexRoute: DashboardEventsIndexRoute,
+  DashboardEventsOrderReturnOrderIdRoute:
+    DashboardEventsOrderReturnOrderIdRoute,
+  DashboardEventsOrderOrderIdRoute: DashboardEventsOrderOrderIdRoute,
 }
 
 const DashboardEventsRouteWithChildren = DashboardEventsRoute._addFileChildren(

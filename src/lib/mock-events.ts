@@ -19,6 +19,7 @@ export type InventoryEvent = {
   shortDescription: string;
   description: string;
   status: EventStatus;
+  logoUrl: string;
 };
 
 export const EVENT_TIME_ZONES: { value: EventTimeZone; label: string }[] = [
@@ -48,6 +49,7 @@ export function emptyEventForm(): Omit<InventoryEvent, "id"> {
     shortDescription: "",
     description: "",
     status: "Draft",
+    logoUrl: "",
   };
 }
 
@@ -77,6 +79,7 @@ let events: InventoryEvent[] = [
     shortDescription: "Annual summer technology showcase.",
     description: "<p>Join us for the <strong>Summer Tech Showcase</strong>.</p>",
     status: "Live",
+    logoUrl: "",
   },
   {
     id: "2",
@@ -96,6 +99,7 @@ let events: InventoryEvent[] = [
     shortDescription: "",
     description: "",
     status: "Draft",
+    logoUrl: "",
   },
   {
     id: "3",
@@ -116,6 +120,7 @@ let events: InventoryEvent[] = [
     description:
       "<p>CareFlite's <strong>Emergency Care Update Conference</strong> at Irving Convention Center.</p>",
     status: "Live",
+    logoUrl: "",
   },
 ];
 

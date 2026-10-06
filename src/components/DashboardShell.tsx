@@ -37,7 +37,28 @@ const NAV_ITEMS: {
     icon: CalendarDays,
     children: [
       { label: "View Events", to: "/dashboard/events" },
-      { label: "View New Orders", to: "/dashboard/events/orders" },
+      { label: "View New Orders", to: "/dashboard/events/orders/new" },
+      {
+        label: "View Processing Orders",
+        to: "/dashboard/events/orders/processing",
+      },
+      { label: "View Shipped Orders", to: "/dashboard/events/orders/shipped" },
+      {
+        label: "View Delivered Orders",
+        to: "/dashboard/events/orders/delivered",
+      },
+      {
+        label: "View Completed Orders",
+        to: "/dashboard/events/orders/completed",
+      },
+      {
+        label: "View Cancelled Orders",
+        to: "/dashboard/events/orders/cancelled",
+      },
+      {
+        label: "Update Return Items",
+        to: "/dashboard/events/orders/returns",
+      },
     ],
   },
   { label: "Order Management", icon: FileText },
@@ -130,12 +151,22 @@ export function DashboardShell() {
                     {children.map((child) => {
                       const childActive =
                         child.to !== undefined &&
-                        (child.to === "/dashboard/events/orders"
-                          ? pathname.startsWith("/dashboard/events/orders")
-                          : child.to === "/dashboard/events"
-                            ? pathname.startsWith("/dashboard/events") &&
-                              !pathname.startsWith("/dashboard/events/orders")
-                            : pathname === child.to);
+                        (child.to === "/dashboard/events/orders/returns"
+                          ? pathname === child.to ||
+                            pathname.startsWith(`${child.to}/`) ||
+                            pathname.startsWith(
+                              "/dashboard/events/order-return",
+                            )
+                          : child.to.startsWith("/dashboard/events/orders/")
+                            ? pathname === child.to ||
+                              pathname.startsWith(`${child.to}/`)
+                            : child.to === "/dashboard/events"
+                              ? pathname.startsWith("/dashboard/events") &&
+                                !pathname.startsWith(
+                                  "/dashboard/events/orders",
+                                ) &&
+                                !pathname.startsWith("/dashboard/events/order")
+                              : pathname === child.to);
                       const className = `block w-full rounded-md px-3 py-2 text-left text-sm transition-colors ${
                         childActive
                           ? "font-medium"
