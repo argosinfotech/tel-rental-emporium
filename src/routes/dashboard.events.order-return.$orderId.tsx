@@ -45,55 +45,6 @@ function hasReturnQty(value: string): boolean {
   return !Number.isNaN(n) && n > 0;
 }
 
-function downloadProductsCsv(order: EventOrder) {
-  const header = [
-    "ItemId",
-    "ItemName",
-    "Variant",
-    "OrderQuantity",
-    "OrderReturnQuantity",
-  ];
-  const rows = order.lines.map((line) => [
-    line.id,
-    `"${line.productTitle.replaceAll('"', '""')}"`,
-    `"${line.variantLabel.replaceAll('"', '""')}"`,
-    String(line.quantity),
-    line.returnQuantity,
-  ]);
-  const csv = [header.join(","), ...rows.map((r) => r.join(","))].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `Order_${order.orderNo}_products.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function parseReturnCsv(
-  text: string,
-  drafts: DraftLine[],
-): Record<string, string> | null {
-  const lines = text
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter(Boolean);
-  if (lines.length < 2) return null;
-  const header = lines[0]!.toLowerCase();
-  if (!header.includes("itemid") || !header.includes("orderreturnquantity")) {
-    return null;
-  }
-  const updates: Record<string, string> = {};
-  const byId = new Map(drafts.map((d) => [d.id, d]));
-  for (const row of lines.slice(1)) {
-    const cols = row.split(",").map((c) => c.replace(/^"|"$/g, "").trim());
-    const id = cols[0];
-    if (!id || !byId.has(id)) continue;
-    updates[id] = cols[4] ?? "";
-  }
-  return updates;
-}
-
 function OrderReturnPage() {
   const { orderId } = Route.useParams();
   const [order, setOrder] = useState<EventOrder | undefined>(() =>
@@ -174,30 +125,6 @@ function OrderReturnPage() {
     setDrafts(toDraftLines(updated.lines));
     setPreviewMode(false);
     setMessage("Inventory return quantities updated.");
-  };
-
-  const onFileSelected = async (file: File | null) => {
-    if (!file) return;
-    setError("");
-    try {
-      const text = await file.text();
-      const updates = parseReturnCsv(text, drafts);
-      if (!updates) {
-        setError(
-          "Could not parse CSV. Expected columns: ItemId, ItemName, Variant, OrderQuantity, OrderReturnQuantity.",
-        );
-        return;
-      }
-      setDrafts((prev) =>
-        prev.map((d) => ({
-          ...d,
-          returnQuantity: updates[d.id] ?? d.returnQuantity,
-        })),
-      );
-      setMessage("Return quantities loaded from file. Review and update inventory.");
-    } catch {
-      setError("Failed to read the selected file.");
-    }
   };
 
   return (
@@ -291,102 +218,62 @@ function OrderReturnPage() {
 
       {!previewMode ? (
         <div className="rounded-lg border border-border bg-white p-5 shadow-sm">
-          <div className="mx-auto max-w-2xl space-y-5">
-            <div>
-              <h2 className="mb-2 text-base font-semibold text-[#495057]">
-                Step 1: Download the products file for the order
-              </h2>
-              <button
-                type="button"
-                onClick={() => downloadProductsCsv(order)}
-                className="rounded-md border border-border bg-white px-3 py-1.5 text-sm font-medium text-[#495057] hover:bg-muted"
-              >
-                Download Products
-              </button>
-            </div>
-            <hr className="border-border" />
-            <div>
-              <h2 className="mb-2 text-base font-semibold text-[#495057]">
-                Step 2: Update the products file
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Update return quantities in the downloaded file, or edit them
-                inline below.
-              </p>
-            </div>
-            <hr className="border-border" />
-            <div>
-              <h2 className="mb-2 text-base font-semibold text-[#495057]">
-                Step 3: Upload the updated products file
-              </h2>
-              <label className="mb-2 block text-sm text-[#495057]">
-                Select CSV File
-              </label>
-              <input
-                type="file"
-                accept=".csv,text/csv"
-                onChange={(e) => onFileSelected(e.target.files?.[0] ?? null)}
-                className="block w-full max-w-md text-sm text-[#495057] file:mr-3 file:rounded-md file:border file:border-border file:bg-white file:px-3 file:py-1.5"
-              />
-            </div>
-
-            <div className="overflow-x-auto pt-2">
-              <table className="w-full min-w-[640px] border-collapse text-sm">
-                <thead>
-                  <tr
-                    className="text-left text-white"
-                    style={{ backgroundColor: BRAND.primary }}
-                  >
-                    <th className="px-3 py-2 font-semibold">Item</th>
-                    <th className="px-3 py-2 text-center font-semibold">
-                      Order Quantity
-                    </th>
-                    <th className="px-3 py-2 text-center font-semibold">
-                      Order Return Quantity
-                    </th>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-sm">
+              <thead>
+                <tr
+                  className="text-left text-white"
+                  style={{ backgroundColor: BRAND.primary }}
+                >
+                  <th className="px-3 py-2 font-semibold">Item</th>
+                  <th className="px-3 py-2 text-center font-semibold">
+                    Order Quantity
+                  </th>
+                  <th className="px-3 py-2 text-center font-semibold">
+                    Order Return Quantity
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {drafts.map((line) => (
+                  <tr key={line.id} className="border-t border-border">
+                    <td className="px-3 py-2 text-[#495057]">
+                      <div>{line.productTitle}</div>
+                      {line.variantLabel && (
+                        <div className="text-xs text-muted-foreground">
+                          {line.variantLabel}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-3 py-2 text-center text-[#495057]">
+                      {line.quantity}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      <input
+                        type="number"
+                        min={0}
+                        max={line.quantity}
+                        value={line.returnQuantity}
+                        onChange={(e) =>
+                          setReturnQty(line.id, e.target.value)
+                        }
+                        className="mx-auto w-24 rounded-md border border-border px-2 py-1 text-center text-sm focus:border-[#0b8a7a] focus:outline-none"
+                      />
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {drafts.map((line) => (
-                    <tr key={line.id} className="border-t border-border">
-                      <td className="px-3 py-2 text-[#495057]">
-                        <div>{line.productTitle}</div>
-                        {line.variantLabel && (
-                          <div className="text-xs text-muted-foreground">
-                            {line.variantLabel}
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-3 py-2 text-center text-[#495057]">
-                        {line.quantity}
-                      </td>
-                      <td className="px-3 py-2 text-center">
-                        <input
-                          type="number"
-                          min={0}
-                          max={line.quantity}
-                          value={line.returnQuantity}
-                          onChange={(e) =>
-                            setReturnQty(line.id, e.target.value)
-                          }
-                          className="mx-auto w-24 rounded-md border border-border px-2 py-1 text-center text-sm focus:border-[#0b8a7a] focus:outline-none"
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <button
-              type="button"
-              onClick={onUpdateInventory}
-              className="rounded-md px-4 py-2 text-sm font-medium text-white"
-              style={{ backgroundColor: BRAND.primary }}
-            >
-              Update Inventory
-            </button>
+                ))}
+              </tbody>
+            </table>
           </div>
+
+          <button
+            type="button"
+            onClick={onUpdateInventory}
+            className="mt-4 rounded-md px-4 py-2 text-sm font-medium text-white"
+            style={{ backgroundColor: BRAND.primary }}
+          >
+            Update Inventory
+          </button>
         </div>
       ) : (
         <div className="rounded-lg border border-border bg-white p-5 shadow-sm">
