@@ -257,7 +257,7 @@ function OrderReturnPage() {
                         onChange={(e) =>
                           setReturnQty(line.id, e.target.value)
                         }
-                        className="mx-auto w-24 rounded-md border border-border px-2 py-1 text-center text-sm focus:border-[#0b8a7a] focus:outline-none"
+                        className="mx-auto w-24 rounded-md border border-[#6b7280] bg-white px-2 py-1 text-center text-sm text-[#495057] focus:border-[#0b8a7a] focus:outline-none"
                       />
                     </td>
                   </tr>
