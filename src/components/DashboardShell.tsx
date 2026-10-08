@@ -67,7 +67,10 @@ const NAV_ITEMS: {
     icon: Settings,
     children: [
       { label: "Back Office Users" },
-      { label: "Email Templates" },
+      {
+        label: "Email Templates",
+        to: "/dashboard/settings/email-templates",
+      },
       {
         label: "Notification Emails",
         to: "/dashboard/settings/notification-emails",

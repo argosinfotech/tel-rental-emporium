@@ -28,6 +28,7 @@ import { Route as DashboardEventsIndexRouteImport } from './routes/dashboard.eve
 import { Route as DashboardEventsEventIdRouteImport } from './routes/dashboard.events.$eventId'
 import { Route as DashboardEventsNewRouteImport } from './routes/dashboard.events.new'
 import { Route as DashboardEventsOrdersRouteImport } from './routes/dashboard.events.orders'
+import { Route as DashboardSettingsEmailTemplatesRouteImport } from './routes/dashboard.settings.email-templates'
 import { Route as DashboardSettingsNotificationEmailsRouteImport } from './routes/dashboard.settings.notification-emails'
 import { Route as StoreShopIndexRouteImport } from './routes/store.shop.index'
 import { Route as StoreShopProductIdRouteImport } from './routes/store.shop.$productId'
@@ -38,6 +39,8 @@ import { Route as DashboardEventsOrderOrderIdRouteImport } from './routes/dashbo
 import { Route as DashboardEventsOrdersIndexRouteImport } from './routes/dashboard.events.orders.index'
 import { Route as DashboardEventsOrdersStatusRouteImport } from './routes/dashboard.events.orders.$status'
 import { Route as DashboardEventsOrdersReturnsRouteImport } from './routes/dashboard.events.orders.returns'
+import { Route as DashboardSettingsEmailTemplatesIndexRouteImport } from './routes/dashboard.settings.email-templates.index'
+import { Route as DashboardSettingsEmailTemplatesTemplateIdRouteImport } from './routes/dashboard.settings.email-templates.$templateId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -135,6 +138,12 @@ const DashboardEventsOrdersRoute = DashboardEventsOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => DashboardEventsRoute,
 } as any)
+const DashboardSettingsEmailTemplatesRoute =
+  DashboardSettingsEmailTemplatesRouteImport.update({
+    id: '/settings/email-templates',
+    path: '/settings/email-templates',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardSettingsNotificationEmailsRoute =
   DashboardSettingsNotificationEmailsRouteImport.update({
     id: '/settings/notification-emails',
@@ -193,6 +202,18 @@ const DashboardEventsOrdersReturnsRoute =
     path: '/returns',
     getParentRoute: () => DashboardEventsOrdersRoute,
   } as any)
+const DashboardSettingsEmailTemplatesIndexRoute =
+  DashboardSettingsEmailTemplatesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardSettingsEmailTemplatesRoute,
+  } as any)
+const DashboardSettingsEmailTemplatesTemplateIdRoute =
+  DashboardSettingsEmailTemplatesTemplateIdRouteImport.update({
+    id: '/$templateId',
+    path: '/$templateId',
+    getParentRoute: () => DashboardSettingsEmailTemplatesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -213,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
   '/dashboard/events/new': typeof DashboardEventsNewRoute
   '/dashboard/events/orders': typeof DashboardEventsOrdersRouteWithChildren
+  '/dashboard/settings/email-templates': typeof DashboardSettingsEmailTemplatesRouteWithChildren
   '/dashboard/settings/notification-emails': typeof DashboardSettingsNotificationEmailsRoute
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
@@ -223,7 +245,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
   '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
   '/dashboard/events/orders/returns': typeof DashboardEventsOrdersReturnsRoute
+  '/dashboard/settings/email-templates/$templateId': typeof DashboardSettingsEmailTemplatesTemplateIdRoute
   '/dashboard/events/orders/': typeof DashboardEventsOrdersIndexRoute
+  '/dashboard/settings/email-templates/': typeof DashboardSettingsEmailTemplatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -249,7 +273,9 @@ export interface FileRoutesByTo {
   '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
   '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
   '/dashboard/events/orders/returns': typeof DashboardEventsOrdersReturnsRoute
+  '/dashboard/settings/email-templates/$templateId': typeof DashboardSettingsEmailTemplatesTemplateIdRoute
   '/dashboard/events/orders': typeof DashboardEventsOrdersIndexRoute
+  '/dashboard/settings/email-templates': typeof DashboardSettingsEmailTemplatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -271,6 +297,7 @@ export interface FileRoutesById {
   '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
   '/dashboard/events/new': typeof DashboardEventsNewRoute
   '/dashboard/events/orders': typeof DashboardEventsOrdersRouteWithChildren
+  '/dashboard/settings/email-templates': typeof DashboardSettingsEmailTemplatesRouteWithChildren
   '/dashboard/settings/notification-emails': typeof DashboardSettingsNotificationEmailsRoute
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
@@ -281,7 +308,9 @@ export interface FileRoutesById {
   '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
   '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
   '/dashboard/events/orders/returns': typeof DashboardEventsOrdersReturnsRoute
+  '/dashboard/settings/email-templates/$templateId': typeof DashboardSettingsEmailTemplatesTemplateIdRoute
   '/dashboard/events/orders/': typeof DashboardEventsOrdersIndexRoute
+  '/dashboard/settings/email-templates/': typeof DashboardSettingsEmailTemplatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -304,6 +333,7 @@ export interface FileRouteTypes {
     | '/dashboard/events/$eventId'
     | '/dashboard/events/new'
     | '/dashboard/events/orders'
+    | '/dashboard/settings/email-templates'
     | '/dashboard/settings/notification-emails'
     | '/store/shop/$productId'
     | '/dashboard/events/'
@@ -314,7 +344,9 @@ export interface FileRouteTypes {
     | '/dashboard/events/order/$orderId'
     | '/dashboard/events/orders/$status'
     | '/dashboard/events/orders/returns'
+    | '/dashboard/settings/email-templates/$templateId'
     | '/dashboard/events/orders/'
+    | '/dashboard/settings/email-templates/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -340,7 +372,9 @@ export interface FileRouteTypes {
     | '/dashboard/events/order/$orderId'
     | '/dashboard/events/orders/$status'
     | '/dashboard/events/orders/returns'
+    | '/dashboard/settings/email-templates/$templateId'
     | '/dashboard/events/orders'
+    | '/dashboard/settings/email-templates'
   id:
     | '__root__'
     | '/'
@@ -361,6 +395,7 @@ export interface FileRouteTypes {
     | '/dashboard/events/$eventId'
     | '/dashboard/events/new'
     | '/dashboard/events/orders'
+    | '/dashboard/settings/email-templates'
     | '/dashboard/settings/notification-emails'
     | '/store/shop/$productId'
     | '/dashboard/events/'
@@ -371,7 +406,9 @@ export interface FileRouteTypes {
     | '/dashboard/events/order/$orderId'
     | '/dashboard/events/orders/$status'
     | '/dashboard/events/orders/returns'
+    | '/dashboard/settings/email-templates/$templateId'
     | '/dashboard/events/orders/'
+    | '/dashboard/settings/email-templates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -516,6 +553,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEventsOrdersRouteImport
       parentRoute: typeof DashboardEventsRoute
     }
+    '/dashboard/settings/email-templates': {
+      id: '/dashboard/settings/email-templates'
+      path: '/settings/email-templates'
+      fullPath: '/dashboard/settings/email-templates'
+      preLoaderRoute: typeof DashboardSettingsEmailTemplatesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/settings/notification-emails': {
       id: '/dashboard/settings/notification-emails'
       path: '/settings/notification-emails'
@@ -586,6 +630,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEventsOrdersReturnsRouteImport
       parentRoute: typeof DashboardEventsOrdersRoute
     }
+    '/dashboard/settings/email-templates/': {
+      id: '/dashboard/settings/email-templates/'
+      path: '/'
+      fullPath: '/dashboard/settings/email-templates/'
+      preLoaderRoute: typeof DashboardSettingsEmailTemplatesIndexRouteImport
+      parentRoute: typeof DashboardSettingsEmailTemplatesRoute
+    }
+    '/dashboard/settings/email-templates/$templateId': {
+      id: '/dashboard/settings/email-templates/$templateId'
+      path: '/$templateId'
+      fullPath: '/dashboard/settings/email-templates/$templateId'
+      preLoaderRoute: typeof DashboardSettingsEmailTemplatesTemplateIdRouteImport
+      parentRoute: typeof DashboardSettingsEmailTemplatesRoute
+    }
   }
 }
 
@@ -634,11 +692,30 @@ const DashboardEventsRouteWithChildren = DashboardEventsRoute._addFileChildren(
   DashboardEventsRouteChildren,
 )
 
+interface DashboardSettingsEmailTemplatesRouteChildren {
+  DashboardSettingsEmailTemplatesTemplateIdRoute: typeof DashboardSettingsEmailTemplatesTemplateIdRoute
+  DashboardSettingsEmailTemplatesIndexRoute: typeof DashboardSettingsEmailTemplatesIndexRoute
+}
+
+const DashboardSettingsEmailTemplatesRouteChildren: DashboardSettingsEmailTemplatesRouteChildren =
+  {
+    DashboardSettingsEmailTemplatesTemplateIdRoute:
+      DashboardSettingsEmailTemplatesTemplateIdRoute,
+    DashboardSettingsEmailTemplatesIndexRoute:
+      DashboardSettingsEmailTemplatesIndexRoute,
+  }
+
+const DashboardSettingsEmailTemplatesRouteWithChildren =
+  DashboardSettingsEmailTemplatesRoute._addFileChildren(
+    DashboardSettingsEmailTemplatesRouteChildren,
+  )
+
 interface DashboardRouteChildren {
   DashboardEventsRoute: typeof DashboardEventsRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardClientsClientIdRoute: typeof DashboardClientsClientIdRoute
   DashboardClientsActiveRoute: typeof DashboardClientsActiveRoute
+  DashboardSettingsEmailTemplatesRoute: typeof DashboardSettingsEmailTemplatesRouteWithChildren
   DashboardSettingsNotificationEmailsRoute: typeof DashboardSettingsNotificationEmailsRoute
 }
 
@@ -647,6 +724,8 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardClientsClientIdRoute: DashboardClientsClientIdRoute,
   DashboardClientsActiveRoute: DashboardClientsActiveRoute,
+  DashboardSettingsEmailTemplatesRoute:
+    DashboardSettingsEmailTemplatesRouteWithChildren,
   DashboardSettingsNotificationEmailsRoute:
     DashboardSettingsNotificationEmailsRoute,
 }
