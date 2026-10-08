@@ -28,8 +28,11 @@ import { Route as DashboardEventsIndexRouteImport } from './routes/dashboard.eve
 import { Route as DashboardEventsEventIdRouteImport } from './routes/dashboard.events.$eventId'
 import { Route as DashboardEventsNewRouteImport } from './routes/dashboard.events.new'
 import { Route as DashboardEventsOrdersRouteImport } from './routes/dashboard.events.orders'
+import { Route as DashboardSettingsNotificationEmailsRouteImport } from './routes/dashboard.settings.notification-emails'
 import { Route as StoreShopIndexRouteImport } from './routes/store.shop.index'
 import { Route as StoreShopProductIdRouteImport } from './routes/store.shop.$productId'
+import { Route as DashboardEventsEventIdDeliverySheetRouteImport } from './routes/dashboard.events.$eventId_.delivery-sheet'
+import { Route as DashboardEventsEventIdPickSheetRouteImport } from './routes/dashboard.events.$eventId_.pick-sheet'
 import { Route as DashboardEventsOrderReturnOrderIdRouteImport } from './routes/dashboard.events.order-return.$orderId'
 import { Route as DashboardEventsOrderOrderIdRouteImport } from './routes/dashboard.events.order.$orderId'
 import { Route as DashboardEventsOrdersIndexRouteImport } from './routes/dashboard.events.orders.index'
@@ -132,6 +135,12 @@ const DashboardEventsOrdersRoute = DashboardEventsOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => DashboardEventsRoute,
 } as any)
+const DashboardSettingsNotificationEmailsRoute =
+  DashboardSettingsNotificationEmailsRouteImport.update({
+    id: '/settings/notification-emails',
+    path: '/settings/notification-emails',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const StoreShopIndexRoute = StoreShopIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -142,6 +151,18 @@ const StoreShopProductIdRoute = StoreShopProductIdRouteImport.update({
   path: '/$productId',
   getParentRoute: () => StoreShopRoute,
 } as any)
+const DashboardEventsEventIdDeliverySheetRoute =
+  DashboardEventsEventIdDeliverySheetRouteImport.update({
+    id: '/$eventId_/delivery-sheet',
+    path: '/$eventId/delivery-sheet',
+    getParentRoute: () => DashboardEventsRoute,
+  } as any)
+const DashboardEventsEventIdPickSheetRoute =
+  DashboardEventsEventIdPickSheetRouteImport.update({
+    id: '/$eventId_/pick-sheet',
+    path: '/$eventId/pick-sheet',
+    getParentRoute: () => DashboardEventsRoute,
+  } as any)
 const DashboardEventsOrderReturnOrderIdRoute =
   DashboardEventsOrderReturnOrderIdRouteImport.update({
     id: '/order-return/$orderId',
@@ -192,9 +213,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
   '/dashboard/events/new': typeof DashboardEventsNewRoute
   '/dashboard/events/orders': typeof DashboardEventsOrdersRouteWithChildren
+  '/dashboard/settings/notification-emails': typeof DashboardSettingsNotificationEmailsRoute
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
   '/store/shop/': typeof StoreShopIndexRoute
+  '/dashboard/events/$eventId/delivery-sheet': typeof DashboardEventsEventIdDeliverySheetRoute
+  '/dashboard/events/$eventId/pick-sheet': typeof DashboardEventsEventIdPickSheetRoute
   '/dashboard/events/order-return/$orderId': typeof DashboardEventsOrderReturnOrderIdRoute
   '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
   '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
@@ -215,9 +239,12 @@ export interface FileRoutesByTo {
   '/dashboard/clients/active': typeof DashboardClientsActiveRoute
   '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
   '/dashboard/events/new': typeof DashboardEventsNewRoute
+  '/dashboard/settings/notification-emails': typeof DashboardSettingsNotificationEmailsRoute
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events': typeof DashboardEventsIndexRoute
   '/store/shop': typeof StoreShopIndexRoute
+  '/dashboard/events/$eventId/delivery-sheet': typeof DashboardEventsEventIdDeliverySheetRoute
+  '/dashboard/events/$eventId/pick-sheet': typeof DashboardEventsEventIdPickSheetRoute
   '/dashboard/events/order-return/$orderId': typeof DashboardEventsOrderReturnOrderIdRoute
   '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
   '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
@@ -244,9 +271,12 @@ export interface FileRoutesById {
   '/dashboard/events/$eventId': typeof DashboardEventsEventIdRoute
   '/dashboard/events/new': typeof DashboardEventsNewRoute
   '/dashboard/events/orders': typeof DashboardEventsOrdersRouteWithChildren
+  '/dashboard/settings/notification-emails': typeof DashboardSettingsNotificationEmailsRoute
   '/store/shop/$productId': typeof StoreShopProductIdRoute
   '/dashboard/events/': typeof DashboardEventsIndexRoute
   '/store/shop/': typeof StoreShopIndexRoute
+  '/dashboard/events/$eventId_/delivery-sheet': typeof DashboardEventsEventIdDeliverySheetRoute
+  '/dashboard/events/$eventId_/pick-sheet': typeof DashboardEventsEventIdPickSheetRoute
   '/dashboard/events/order-return/$orderId': typeof DashboardEventsOrderReturnOrderIdRoute
   '/dashboard/events/order/$orderId': typeof DashboardEventsOrderOrderIdRoute
   '/dashboard/events/orders/$status': typeof DashboardEventsOrdersStatusRoute
@@ -274,9 +304,12 @@ export interface FileRouteTypes {
     | '/dashboard/events/$eventId'
     | '/dashboard/events/new'
     | '/dashboard/events/orders'
+    | '/dashboard/settings/notification-emails'
     | '/store/shop/$productId'
     | '/dashboard/events/'
     | '/store/shop/'
+    | '/dashboard/events/$eventId/delivery-sheet'
+    | '/dashboard/events/$eventId/pick-sheet'
     | '/dashboard/events/order-return/$orderId'
     | '/dashboard/events/order/$orderId'
     | '/dashboard/events/orders/$status'
@@ -297,9 +330,12 @@ export interface FileRouteTypes {
     | '/dashboard/clients/active'
     | '/dashboard/events/$eventId'
     | '/dashboard/events/new'
+    | '/dashboard/settings/notification-emails'
     | '/store/shop/$productId'
     | '/dashboard/events'
     | '/store/shop'
+    | '/dashboard/events/$eventId/delivery-sheet'
+    | '/dashboard/events/$eventId/pick-sheet'
     | '/dashboard/events/order-return/$orderId'
     | '/dashboard/events/order/$orderId'
     | '/dashboard/events/orders/$status'
@@ -325,9 +361,12 @@ export interface FileRouteTypes {
     | '/dashboard/events/$eventId'
     | '/dashboard/events/new'
     | '/dashboard/events/orders'
+    | '/dashboard/settings/notification-emails'
     | '/store/shop/$productId'
     | '/dashboard/events/'
     | '/store/shop/'
+    | '/dashboard/events/$eventId_/delivery-sheet'
+    | '/dashboard/events/$eventId_/pick-sheet'
     | '/dashboard/events/order-return/$orderId'
     | '/dashboard/events/order/$orderId'
     | '/dashboard/events/orders/$status'
@@ -477,6 +516,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardEventsOrdersRouteImport
       parentRoute: typeof DashboardEventsRoute
     }
+    '/dashboard/settings/notification-emails': {
+      id: '/dashboard/settings/notification-emails'
+      path: '/settings/notification-emails'
+      fullPath: '/dashboard/settings/notification-emails'
+      preLoaderRoute: typeof DashboardSettingsNotificationEmailsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/store/shop/': {
       id: '/store/shop/'
       path: '/'
@@ -490,6 +536,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/store/shop/$productId'
       preLoaderRoute: typeof StoreShopProductIdRouteImport
       parentRoute: typeof StoreShopRoute
+    }
+    '/dashboard/events/$eventId_/delivery-sheet': {
+      id: '/dashboard/events/$eventId_/delivery-sheet'
+      path: '/$eventId/delivery-sheet'
+      fullPath: '/dashboard/events/$eventId/delivery-sheet'
+      preLoaderRoute: typeof DashboardEventsEventIdDeliverySheetRouteImport
+      parentRoute: typeof DashboardEventsRoute
+    }
+    '/dashboard/events/$eventId_/pick-sheet': {
+      id: '/dashboard/events/$eventId_/pick-sheet'
+      path: '/$eventId/pick-sheet'
+      fullPath: '/dashboard/events/$eventId/pick-sheet'
+      preLoaderRoute: typeof DashboardEventsEventIdPickSheetRouteImport
+      parentRoute: typeof DashboardEventsRoute
     }
     '/dashboard/events/order-return/$orderId': {
       id: '/dashboard/events/order-return/$orderId'
@@ -551,6 +611,8 @@ interface DashboardEventsRouteChildren {
   DashboardEventsNewRoute: typeof DashboardEventsNewRoute
   DashboardEventsOrdersRoute: typeof DashboardEventsOrdersRouteWithChildren
   DashboardEventsIndexRoute: typeof DashboardEventsIndexRoute
+  DashboardEventsEventIdDeliverySheetRoute: typeof DashboardEventsEventIdDeliverySheetRoute
+  DashboardEventsEventIdPickSheetRoute: typeof DashboardEventsEventIdPickSheetRoute
   DashboardEventsOrderReturnOrderIdRoute: typeof DashboardEventsOrderReturnOrderIdRoute
   DashboardEventsOrderOrderIdRoute: typeof DashboardEventsOrderOrderIdRoute
 }
@@ -560,6 +622,9 @@ const DashboardEventsRouteChildren: DashboardEventsRouteChildren = {
   DashboardEventsNewRoute: DashboardEventsNewRoute,
   DashboardEventsOrdersRoute: DashboardEventsOrdersRouteWithChildren,
   DashboardEventsIndexRoute: DashboardEventsIndexRoute,
+  DashboardEventsEventIdDeliverySheetRoute:
+    DashboardEventsEventIdDeliverySheetRoute,
+  DashboardEventsEventIdPickSheetRoute: DashboardEventsEventIdPickSheetRoute,
   DashboardEventsOrderReturnOrderIdRoute:
     DashboardEventsOrderReturnOrderIdRoute,
   DashboardEventsOrderOrderIdRoute: DashboardEventsOrderOrderIdRoute,
@@ -574,6 +639,7 @@ interface DashboardRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardClientsClientIdRoute: typeof DashboardClientsClientIdRoute
   DashboardClientsActiveRoute: typeof DashboardClientsActiveRoute
+  DashboardSettingsNotificationEmailsRoute: typeof DashboardSettingsNotificationEmailsRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -581,6 +647,8 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardClientsClientIdRoute: DashboardClientsClientIdRoute,
   DashboardClientsActiveRoute: DashboardClientsActiveRoute,
+  DashboardSettingsNotificationEmailsRoute:
+    DashboardSettingsNotificationEmailsRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(

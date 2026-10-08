@@ -62,19 +62,37 @@ const NAV_ITEMS: {
     ],
   },
   { label: "Order Management", icon: FileText },
-  { label: "Settings", icon: Settings },
+  {
+    label: "Settings",
+    icon: Settings,
+    children: [
+      { label: "Back Office Users" },
+      { label: "Email Templates" },
+      {
+        label: "Notification Emails",
+        to: "/dashboard/settings/notification-emails",
+      },
+      { label: "Onboarding Email Attachments" },
+    ],
+  },
   { label: "Reports", icon: ExternalLink },
 ];
 
 export function DashboardShell() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [expanded, setExpanded] = useState<string | null>("Client Management");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
   const isDashboardActive =
     pathname === "/dashboard" || pathname === "/dashboard/";
   const isClientManagementActive = pathname.startsWith("/dashboard/clients");
   const isEventManagementActive = pathname.startsWith("/dashboard/events");
+  const isSettingsActive = pathname.startsWith("/dashboard/settings");
+
+  const defaultExpanded = isSettingsActive
+    ? "Settings"
+    : isEventManagementActive
+      ? "Event Management"
+      : "Client Management";
+  const [expanded, setExpanded] = useState<string | null>(defaultExpanded);
 
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: BRAND.pageBg }}>
@@ -101,7 +119,9 @@ export function DashboardShell() {
                   ? isClientManagementActive
                   : label === "Event Management"
                     ? isEventManagementActive
-                    : false;
+                    : label === "Settings"
+                      ? isSettingsActive
+                      : false;
 
             const parentClass = `flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
               parentActive

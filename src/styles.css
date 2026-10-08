@@ -143,3 +143,42 @@
     color: var(--color-foreground);
   }
 }
+
+/* Event Pick / Delivery Sheet print-to-PDF */
+@media print {
+  aside,
+  header,
+  footer,
+  .sheet-no-print {
+    display: none !important;
+  }
+
+  .sheet-print-only {
+    display: block !important;
+  }
+
+  tr.sheet-print-only,
+  tr.sheet-print-only.hidden {
+    display: table-row !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .delivery-booth-sheet {
+    break-after: page;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .delivery-booth-sheet:last-child {
+    break-after: auto;
+  }
+}

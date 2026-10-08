@@ -231,7 +231,7 @@ function ViewEvents() {
                   </td>
                   <td className="px-6 py-3 text-[#495057]">{event.status}</td>
                   <td className="px-6 py-3">
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                       <Link
                         to="/dashboard/events/$eventId"
                         params={{ eventId: event.id }}
@@ -248,6 +248,22 @@ function ViewEvents() {
                       >
                         <X className="h-4 w-4" />
                       </button>
+                      <Link
+                        to="/dashboard/events/$eventId/pick-sheet"
+                        params={{ eventId: event.id }}
+                        className="text-xs font-medium hover:underline"
+                        style={{ color: BRAND.primary }}
+                      >
+                        Pick Sheet
+                      </Link>
+                      <Link
+                        to="/dashboard/events/$eventId/delivery-sheet"
+                        params={{ eventId: event.id }}
+                        className="text-xs font-medium hover:underline"
+                        style={{ color: BRAND.primary }}
+                      >
+                        Delivery Sheet
+                      </Link>
                     </div>
                   </td>
                 </tr>
