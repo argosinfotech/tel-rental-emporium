@@ -35,6 +35,7 @@ function PickSheetPage() {
   const event = getEvent(eventId);
   const lines = useMemo(() => getPickSheetLines(eventId), [eventId]);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [generating, setGenerating] = useState(false);
 
   const checkedCount = lines.filter((l) => checked[l.id]).length;
   const allChecked = lines.length > 0 && checkedCount === lines.length;
@@ -51,9 +52,20 @@ function PickSheetPage() {
 
   const clearAll = () => setChecked({});
 
-  const generatePdf = () => {
-    if (checkedCount === 0) return;
-    window.print();
+  const generatePdf = async () => {
+    if (!event || checkedCount === 0 || generating) return;
+    const selected = lines.filter((l) => checked[l.id]);
+    setGenerating(true);
+    try {
+      const { downloadPickSheetPdf } = await import("@/lib/event-sheet-pdf");
+      await downloadPickSheetPdf({
+        eventName: event.eventName,
+        eventCode: event.eventCode,
+        lines: selected,
+      });
+    } finally {
+      setGenerating(false);
+    }
   };
 
   if (!event) {
@@ -75,7 +87,7 @@ function PickSheetPage() {
 
   return (
     <div className="p-6">
-      <div className="sheet-no-print mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <Link
             to="/dashboard/events"
@@ -111,18 +123,17 @@ function PickSheetPage() {
           </button>
           <button
             type="button"
-            onClick={generatePdf}
-            disabled={checkedCount === 0}
+            onClick={() => void generatePdf()}
+            disabled={checkedCount === 0 || generating}
             className="rounded-md px-4 py-1.5 text-sm font-medium text-white transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             style={{ backgroundColor: BRAND.primary }}
           >
-            Generate PDF
+            {generating ? "Generating…" : "Generate PDF"}
           </button>
         </div>
       </div>
 
-      {/* Screen checklist */}
-      <div className="sheet-no-print rounded-lg border border-border bg-white shadow-sm">
+      <div className="rounded-lg border border-border bg-white shadow-sm">
         {lines.length === 0 ? (
           <p className="px-6 py-8 text-center text-sm text-muted-foreground">
             No order items for this event.
@@ -171,48 +182,6 @@ function PickSheetPage() {
             </tbody>
           </table>
         )}
-      </div>
-
-      {/* Print-only layout (checked items only) */}
-      <div className="sheet-print-only hidden">
-        <h1 className="mb-1 text-xl font-semibold">Pick Sheet</h1>
-        <p className="mb-4 text-sm">
-          {event.eventName} ({event.eventCode})
-        </p>
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 px-3 py-2 text-left">
-                Image
-              </th>
-              <th className="border border-gray-300 px-3 py-2 text-left">
-                Name
-              </th>
-              <th className="border border-gray-300 px-3 py-2 text-left">Qty</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lines
-              .filter((l) => checked[l.id])
-              .map((line) => (
-                <tr key={line.id}>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <img
-                      src={line.imageSrc}
-                      alt=""
-                      className="h-12 w-12 object-cover"
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    {line.name}
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    {line.quantity}
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );

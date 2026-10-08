@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { BRAND } from "@/lib/brand";
 import { getEvent } from "@/lib/mock-events";
 import { getDeliverySheetGroups } from "@/lib/mock-event-sheets";
@@ -36,6 +36,24 @@ function DeliverySheetPage() {
   const { eventId } = Route.useParams();
   const event = getEvent(eventId);
   const groups = useMemo(() => getDeliverySheetGroups(eventId), [eventId]);
+  const [generating, setGenerating] = useState(false);
+
+  const generatePdf = async () => {
+    if (!event || groups.length === 0 || generating) return;
+    setGenerating(true);
+    try {
+      const { downloadDeliverySheetPdf } = await import(
+        "@/lib/event-sheet-pdf"
+      );
+      await downloadDeliverySheetPdf({
+        eventName: event.eventName,
+        eventCode: event.eventCode,
+        groups,
+      });
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   if (!event) {
     return (
@@ -56,7 +74,7 @@ function DeliverySheetPage() {
 
   return (
     <div className="p-6">
-      <div className="sheet-no-print mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <Link
             to="/dashboard/events"
@@ -75,17 +93,17 @@ function DeliverySheetPage() {
         </div>
         <button
           type="button"
-          onClick={() => window.print()}
-          disabled={groups.length === 0}
+          onClick={() => void generatePdf()}
+          disabled={groups.length === 0 || generating}
           className="rounded-md px-4 py-1.5 text-sm font-medium text-white transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           style={{ backgroundColor: BRAND.primary }}
         >
-          Generate PDF
+          {generating ? "Generating…" : "Generate PDF"}
         </button>
       </div>
 
       {groups.length === 0 ? (
-        <div className="sheet-no-print rounded-lg border border-border bg-white px-6 py-8 text-center text-sm text-muted-foreground shadow-sm">
+        <div className="rounded-lg border border-border bg-white px-6 py-8 text-center text-sm text-muted-foreground shadow-sm">
           No booth deliveries for this event.
         </div>
       ) : (
@@ -93,7 +111,7 @@ function DeliverySheetPage() {
           {groups.map((group) => (
             <section
               key={group.booth}
-              className="delivery-booth-sheet rounded-lg border border-border bg-white p-5 shadow-sm"
+              className="rounded-lg border border-border bg-white p-5 shadow-sm"
             >
               <div className="mb-4 border-b border-border pb-3">
                 <h2 className="text-base font-semibold text-[#495057]">
@@ -108,45 +126,31 @@ function DeliverySheetPage() {
                     Order(s): {group.orderNos.join(", ")}
                   </p>
                 )}
-                <p className="sheet-print-only mt-1 hidden text-sm">
-                  {event.eventName} ({event.eventCode})
-                </p>
               </div>
 
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr
-                    className="text-left text-white sheet-no-print"
+                    className="text-left text-white"
                     style={{ backgroundColor: BRAND.primary }}
                   >
                     <th className="w-20 px-3 py-2 font-semibold">Image</th>
                     <th className="px-3 py-2 font-semibold">Item Name</th>
                     <th className="w-24 px-3 py-2 font-semibold">Quantity</th>
                   </tr>
-                  <tr className="sheet-print-only hidden text-left">
-                    <th className="border border-gray-300 px-3 py-2">Image</th>
-                    <th className="border border-gray-300 px-3 py-2">
-                      Item Name
-                    </th>
-                    <th className="border border-gray-300 px-3 py-2">
-                      Quantity
-                    </th>
-                  </tr>
                 </thead>
                 <tbody>
                   {group.lines.map((line) => (
                     <tr key={line.id} className="border-t border-border">
-                      <td className="border-gray-300 px-3 py-2 print:border">
+                      <td className="px-3 py-2">
                         <img
                           src={line.imageSrc}
                           alt=""
                           className="h-12 w-12 rounded object-cover"
                         />
                       </td>
-                      <td className="border-gray-300 px-3 py-2 text-[#495057] print:border">
-                        {line.name}
-                      </td>
-                      <td className="border-gray-300 px-3 py-2 text-[#495057] print:border">
+                      <td className="px-3 py-2 text-[#495057]">{line.name}</td>
+                      <td className="px-3 py-2 text-[#495057]">
                         {line.quantity}
                       </td>
                     </tr>
